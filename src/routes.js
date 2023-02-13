@@ -3,14 +3,14 @@ import {
     Routes,
     Route
 } from 'react-router-dom';
-import Login from './Pages/Login';
+import Login from './Pages/Login/Login';
 import Nav from './components/Nav';
-import Historico from './Pages/Historico';
-import Mensalista from './Pages/Mensalista';
-import Configuracoes from './Pages/Configuracoes';
-import Vagas from './Pages/Vagas';
-import Funcionario from './Pages/Funcionario';
-import Estacionamento from './Pages/Estacionamento';
+import Historico from './Pages/Historico/Historico';
+import Mensalista from './Pages/Mensalista/Mensalista';
+import Configuracoes from './Pages/Configuracao/Configuracoes';
+import Vagas from './Pages/Vaga/Vagas';
+import Funcionario from './Pages/Funcionario/Funcionario';
+import Estacionamento from './Pages/Estacionamento/Estacionamento';
 
 export default function Routes_App() {
     return (

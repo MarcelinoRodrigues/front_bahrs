@@ -58,6 +58,22 @@ export const StyledNavLink = styled(NavLink)`
   }
 `;
 
+export const ButtonNav = styled(NavLink)`
+background-color: ${props => props.backgroundColor}; 
+  color: ${props => props.color};
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  :hover {
+    background-color: ${props => props.backgroundColor}; 
+  }
+`;
+
 // Criando o estilo da NavBar
 export const StyledNavBar = styled.nav`
   display: flex;

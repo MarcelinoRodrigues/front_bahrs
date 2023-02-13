@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, TBody, TD, TH, THead, TR } from '../styles/styles';
-import Nav from '../components/Nav';
+import { Table, TBody, TD, TH, THead, TR } from '../../styles/styles';
+import Nav from '../../components/Nav';
 import moment from 'moment';
 
 export default function Historico() {

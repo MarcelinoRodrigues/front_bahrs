@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../styles/styles';
-import Nav from "../components/Nav";
+import { Button, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
+import Nav from "../../components/Nav";
 
 export default function Configuracoes() {
     const [data, setData] = useState([]);
