@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, H5, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../styles/styles';
-import Nav from "../components/Nav";
-import { Limpeza } from '../services/Traducoes';
+import { Button, ButtonNav, H5, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
+import Nav from "../../components/Nav";
+import { Limpeza } from '../../services/Traducoes';
 import moment from 'moment';
 
 export default function Estacionamento() {
@@ -63,6 +63,14 @@ export default function Estacionamento() {
     return (
         <div className="main">
             <Nav />
+            <ButtonNav
+                type='submit'
+                backgroundColor="#90EE90"
+                color='black'
+                to="/NewParking"
+            >
+                Adicionar +
+            </ButtonNav>
             <Table>
                 <THead>
                     <tr>

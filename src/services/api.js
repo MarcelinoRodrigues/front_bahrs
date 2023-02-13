@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-function App() {
+function Api() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    axios.get('https://localhost:5001/api/Historico')
+    axios.get('https://localhost:5001/api/')
       .then(response => setData(response.data))
       .catch(error => console.error(error));
   }, []);
@@ -17,4 +17,4 @@ function App() {
   );
 }
 
-export default App;
+export default Api;

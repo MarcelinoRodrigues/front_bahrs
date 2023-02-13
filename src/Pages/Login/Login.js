@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Login, FormCard, InputForm, Button, StyledNavLink } from '../styles/styles';
+import { Login, FormCard, InputForm, Button, StyledNavLink } from '../../styles/styles';
 
 export default function LoginForm() {
     const redirectNavigate = useNavigate();
