@@ -67,7 +67,7 @@ export default function Estacionamento() {
                 type='submit'
                 backgroundColor="#90EE90"
                 color='black'
-                to="/NewParking"
+                to="/novoestacionamento"
             >
                 Adicionar +
             </ButtonNav>
