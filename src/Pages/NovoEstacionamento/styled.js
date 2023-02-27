@@ -35,6 +35,19 @@ export const Input = styled.input`
 export const ContainerButton = styled.div`
 `;
 
+export const Button = styled.button`
+background-color: ${props => props.backgroundColor}; 
+  color: ${props => props.color};
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  :hover {
+    background-color: ${props => props.backgroundColor}; 
+  }
+`;
+
 export const ButtonNavLink = styled(NavLink)`
 padding: 0.5rem 1rem;
 background-color: ${props => props.backgroundColor}; 
