@@ -1,6 +1,6 @@
 import Nav from "../../components/Nav";
 import axios from 'axios';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, ButtonNavLink, ContainerButton, Form, Input, Label, Option, Select } from "./styled";
 import { Limpeza } from '../../services/Traducoes';
 import Datetime from 'react-datetime';
@@ -40,7 +40,30 @@ export default function NovoEstacionamento() {
         fetchMensalistas();
     }, []);
 
+    const TratarDadosLimpeza = (recebeSendLimpeza) => {
+        let resultado = 0;
+        //TODO: qualquer alteração de enum Limpeza altera o valor do tratamento
+        switch (recebeSendLimpeza) {
+            case "Completa":
+                resultado = 1;
+                break;
+            case "Interna":
+                resultado = 2;
+                break;
+            case "Externa":
+                resultado = 3;
+                break;
+            default:
+                resultado = 0;
+                break;
+        }
+
+        return resultado;
+    }
+
     const handleSubmit = async (date, selectedMensalista, sendPlaca, selectedFuncionario, selectedVaga, sendLimpeza) => {
+        let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
+        
         await axios.post("https://localhost:5001/api/Estacionamento/", {
             id: 0,
             Entrada: date,
@@ -53,7 +76,7 @@ export default function NovoEstacionamento() {
             valor: null,
             FuncionarioId: selectedFuncionario,
             VagaId: selectedVaga,
-            Limpeza: sendLimpeza
+            Limpeza: setarLimpeza
         });
     };
 
