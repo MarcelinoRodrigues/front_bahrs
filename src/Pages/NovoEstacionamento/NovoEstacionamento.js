@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonNavLink, ContainerButton, Form, Input, Label, Option, Select } from "./styled";
 import { Limpeza } from '../../services/Traducoes';
+import { useNavigate } from 'react-router-dom';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
@@ -18,6 +19,7 @@ export default function NovoEstacionamento() {
     const [funcionario, setFuncionarios] = useState([]);
     const [mensalista, setMensalistas] = useState([]);
     const [date, setDate] = useState(new Date());
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchVagas = async () => {
@@ -61,23 +63,30 @@ export default function NovoEstacionamento() {
         return resultado;
     }
 
-    const handleSubmit = async (date, selectedMensalista, sendPlaca, selectedFuncionario, selectedVaga, sendLimpeza) => {
+    const HandleSubmit = async (date, selectedMensalista, sendPlaca, selectedFuncionario, selectedVaga, sendLimpeza) => {
         let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
-        
-        await axios.post("https://localhost:5001/api/Estacionamento/", {
-            id: 0,
-            Entrada: date,
-            Vaga: null,
-            vencimento: null,
-            mensalista: null,
-            mensalistaId: selectedMensalista,
-            Placa: sendPlaca,
-            Funcionario: null,
-            valor: null,
-            FuncionarioId: selectedFuncionario,
-            VagaId: selectedVaga,
-            Limpeza: setarLimpeza
-        });
+
+        try {
+            await axios.post("https://localhost:5001/api/Estacionamento/", {
+                id: 0,
+                Entrada: date,
+                Vaga: null,
+                vencimento: null,
+                mensalista: null,
+                mensalistaId: selectedMensalista,
+                Placa: sendPlaca,
+                Funcionario: null,
+                valor: null,
+                FuncionarioId: selectedFuncionario,
+                VagaId: selectedVaga,
+                Limpeza: setarLimpeza
+            });
+
+            navigate('/estacionamento');
+        } catch (error) {
+            console.log(error);
+            navigate('/novoestacionamento');
+        }
     };
 
     const options = Object.keys(Limpeza).map((key) => (
@@ -131,10 +140,10 @@ export default function NovoEstacionamento() {
                 </Label>
                 <Label>
                     Placa:
-                    <Input type="text" 
-                            value={sendPlaca}
-                            onChange={(event) => setSendPlaca(event.target.value)} 
-                            required/>
+                    <Input type="text"
+                        value={sendPlaca}
+                        onChange={(event) => setSendPlaca(event.target.value)}
+                        required />
                 </Label>
                 <Label>
                     Funcionario:
@@ -168,17 +177,17 @@ export default function NovoEstacionamento() {
                     </Select>
                 </Label>
                 <ContainerButton>
-                    <Button backgroundColor="#90EE90" 
-                            color="Black" 
-                            onClick={ 
-                                () =>
-                                    handleSubmit(date, 
-                                                selectedMensalista, 
-                                                sendPlaca, 
-                                                selectedFuncionario, 
-                                                selectedVaga, 
-                                                sendLimpeza)
-                                    } >Criar</Button>
+                    <Button backgroundColor="#90EE90"
+                        color="Black"
+                        onClick={
+                            () =>
+                                HandleSubmit(date,
+                                    selectedMensalista,
+                                    sendPlaca,
+                                    selectedFuncionario,
+                                    selectedVaga,
+                                    sendLimpeza)
+                        } >Criar</Button>
                     <ButtonNavLink to="/estacionamento" color="Black" >Voltar</ButtonNavLink>
                 </ContainerButton>
             </Form>
