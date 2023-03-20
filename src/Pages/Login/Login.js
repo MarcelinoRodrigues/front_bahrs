@@ -69,6 +69,7 @@ export default function LoginForm() {
                     <Button type='submit' backgroundColor="#FFC312" color='black'>
                         Entrar
                     </Button>
+                    <StyledNavLink to={"/novoUsuario"}>Novo Usuario</StyledNavLink> 
                     <StyledNavLink to={"/"}>Esqueceu a senha?</StyledNavLink>               
                 </form>
             </FormCard>
