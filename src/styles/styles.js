@@ -197,7 +197,7 @@ export const ModalContent = styled.div`
   form {
     display: flex;
     flex-direction: column;
-    input[type="text"]{
+    input[type="text"],input[type="password"]{
         text-align:center;
         padding:12px 20px;
         margin-bottom: 5px;

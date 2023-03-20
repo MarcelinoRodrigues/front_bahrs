@@ -12,6 +12,7 @@ import Vagas from './Pages/Vaga/Vagas';
 import Funcionario from './Pages/Funcionario/Funcionario';
 import Estacionamento from './Pages/Estacionamento/Estacionamento';
 import NovoEstacionamento from './Pages/NovoEstacionamento/NovoEstacionamento';
+import NovoUsuario from './Pages/NovoUsuario/NovoUsuario';
 
 export default function Routes_App() {
     return (
@@ -26,6 +27,7 @@ export default function Routes_App() {
                 <Route path='/funcionario' element={<Funcionario/>}/>
                 <Route path='/estacionamento' element={<Estacionamento/>}/>
                 <Route path='/novoestacionamento' element={<NovoEstacionamento/>}/>
+                <Route path='/novoUsuario' element={<NovoUsuario/>} />
             </Routes>
         </Router>
     );
