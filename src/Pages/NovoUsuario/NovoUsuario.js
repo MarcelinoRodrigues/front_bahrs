@@ -18,12 +18,16 @@ export default function NovoUsuario() {
 
             alert("Usuario incluido com sucesso!");
 
-            navigate('/');
+            RevolvePath();
 
         } catch (error) {
             console.error(error);
         }
     };
+
+    function RevolvePath(){
+        return navigate('/');
+    }
 
     return(
         <div className="main">
@@ -46,7 +50,7 @@ export default function NovoUsuario() {
                                 autocomplete="off"
                                 onChange={(e) => setSenha(e.target.value)} />
                             <button type="submit">Incluir</button>
-                            <button type="button" to="./">
+                            <button type="button" onClick={(e) => RevolvePath()} >
                                 Voltar
                             </button>
                         </form>
