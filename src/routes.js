@@ -11,8 +11,9 @@ import Configuracoes from './Pages/Configuracao/Configuracoes';
 import Vagas from './Pages/Vaga/Vagas';
 import Funcionario from './Pages/Funcionario/Funcionario';
 import Estacionamento from './Pages/Estacionamento/Estacionamento';
-import NovoEstacionamento from './Pages/NovoEstacionamento/NovoEstacionamento';
+
 import NovoUsuario from './Pages/NovoUsuario/NovoUsuario';
+import NovoEstacionamento from './Pages/Estacionamento/NovoEstacionamento/NovoEstacionamento';
 
 export default function Routes_App() {
     return (

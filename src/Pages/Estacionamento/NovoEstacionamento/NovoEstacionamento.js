@@ -1,8 +1,8 @@
-import Nav from "../../components/Nav";
+import Nav from "../../../components/Nav";
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonNavLink, ContainerButton, Form, Input, Label, Option, Select } from "./styled";
-import { Limpeza } from '../../services/Traducoes';
+import { Limpeza } from '../../../services/Traducoes';
 import { useNavigate } from 'react-router-dom';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
