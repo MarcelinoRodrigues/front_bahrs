@@ -14,19 +14,19 @@ export default function Estacionamento() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios('https://localhost:5001/api/Estacionamento');
+            const result = await axios('https://localhost:44311/api/Estacionamento');
             setData(result.data);
         };
         const fetchMensalistas = async () => {
-            const result = await axios('https://localhost:5001/api/Mensalistas');
+            const result = await axios('https://localhost:44311/api/Mensalistas');
             setMensalistas(result.data);
         };
         const fetchFuncionario = async () => {
-            const result = await axios('https://localhost:5001/api/Funcionarios');
+            const result = await axios('https://localhost:44311/api/Funcionarios');
             setFuncionarios(result.data);
         };
         const fetchVaga = async () => {
-            const result = await axios('https://localhost:5001/api/Vagas');
+            const result = await axios('https://localhost:44311/api/Vagas');
             setVagas(result.data);
         };
         fetchData();
@@ -37,8 +37,8 @@ export default function Estacionamento() {
 
     const handleRemove = async (id) => {
         try {
-            await axios.delete(`https://localhost:5001/api/Estacionamento/${id}`);
-            const result = await axios('https://localhost:5001/api/Estacionamento');
+            await axios.delete(`https://localhost:44311/api/Estacionamento/${id}`);
+            const result = await axios('https://localhost:44311/api/Estacionamento');
             setData(result.data);
         } catch (error) {
             console.error(error);
@@ -47,13 +47,13 @@ export default function Estacionamento() {
 
     const handleEdit = async (id, nome, status) => {
         try {
-            await axios.put(`https://localhost:5001/api/Vagas/${id}`, {
+            await axios.put(`https://localhost:44311/api/Vagas/${id}`, {
                 id: id,
                 Nome: nome,
                 Status: status
             });
 
-            const result = await axios('https://localhost:5001/api/Vagas');
+            const result = await axios('https://localhost:44311/api/Vagas');
             setData(result.data);
         } catch (error) {
             console.error(error);
@@ -95,6 +95,27 @@ export default function Estacionamento() {
 
                         const getVaga = vagas.find(v => v.id === item.vagaId);
                         const nomeVaga = getVaga ? getVaga.nome : '';
+
+                        const ExecuteExit = async (id) =>{
+                            try {
+                                await axios.put(`https://localhost:44311/api/Estacionamento/Saida`, {
+                                    id: id,
+                                    entrada: item.entrada, 
+                                    vencimento: null,
+                                    mensalistaId: item.mensalistaId,
+                                    placa: item.placa,
+                                    valor: null,
+                                    funcionarioId: item.funcionarioId,
+                                    vagaId: item.vagaId,
+                                    limpeza: item.limpeza
+                                });
+
+                                const result = await axios('https://localhost:44311/api/Estacionamento');
+                                setData(result.data);
+                            } catch (error) {
+                                console.error(error);
+                            }
+                        }
                         return (
                             <TR key={item.id}>
                                 <TD>{moment(item.entrada).format('DD-MM-YYYY HH:mm')}</TD>
@@ -200,6 +221,7 @@ export default function Estacionamento() {
                                         type='submit'
                                         backgroundColor="#191970"
                                         color='white'
+                                        onClick={() => ExecuteExit(item.id)}
                                     >
                                         Saída
                                     </Button>

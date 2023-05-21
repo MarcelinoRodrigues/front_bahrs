@@ -12,7 +12,7 @@ export default function Mensalista() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios('https://localhost:5001/api/Mensalistas');
+            const result = await axios('https://localhost:44311/api/Mensalistas');
             setData(result.data);
         };
         fetchData();
@@ -25,10 +25,10 @@ export default function Mensalista() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://localhost:5001/api/Mensalistas', { nome });
+            await axios.post('https://localhost:44311/api/Mensalistas', { nome });
             toggleModal();
 
-            const result = await axios('https://localhost:5001/api/Mensalistas');
+            const result = await axios('https://localhost:44311/api/Mensalistas');
             setData(result.data);
         } catch (error) {
             console.error(error);
@@ -37,8 +37,8 @@ export default function Mensalista() {
 
     const handleRemoveSubmit = async (id) => {
         try {
-            await axios.delete(`https://localhost:5001/api/Mensalistas/${id}`);
-            const result = await axios('https://localhost:5001/api/Mensalistas');
+            await axios.delete(`https://localhost:44311/api/Mensalistas/${id}`);
+            const result = await axios('https://localhost:44311/api/Mensalistas');
             setData(result.data);
         } catch (error) {
             console.error(error);
@@ -47,12 +47,12 @@ export default function Mensalista() {
 
     const handleEdit = async (id, nome) => {
         try {
-            await axios.put(`https://localhost:5001/api/Mensalistas/${id}`, {
+            await axios.put(`https://localhost:44311/api/Mensalistas/${id}`, {
                 id: id,
                 Nome: nome,
             });
 
-            const result = await axios('https://localhost:5001/api/Mensalistas');
+            const result = await axios('https://localhost:44311/api/Mensalistas');
             setData(result.data);
         } catch (error) {
             console.error(error);

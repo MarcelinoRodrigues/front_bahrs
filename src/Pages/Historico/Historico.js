@@ -10,7 +10,7 @@ export default function Historico() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios('https://localhost:5001/api/Historico');
+            const result = await axios('https://localhost:44311/api/Historico');
             setData(result.data);
         };
         fetchData();
@@ -40,7 +40,7 @@ export default function Historico() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        const url = `https://localhost:5001/api/Historico/Filter`;
+        const url = `https://localhost:44311/api/Historico/Filter`;
 
         try {
             const response = await axios.get(url, {

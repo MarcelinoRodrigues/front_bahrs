@@ -22,7 +22,7 @@ export default function Configuracoes() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios('https://localhost:5001/api/Configuracoes');
+            const result = await axios('https://localhost:44311/api/Configuracoes');
             setData(result.data);
         };
 
@@ -36,10 +36,10 @@ export default function Configuracoes() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://localhost:5001/api/Configuracoes', { diaria });
+            await axios.post('https://localhost:44311/api/Configuracoes', { diaria });
             toggleModal();
 
-            const result = await axios('https://localhost:5001/api/Configuracoes');
+            const result = await axios('https://localhost:44311/api/Configuracoes');
             setData(result.data);
         } catch (error) {
             alert('Erro no servidor, descrição do erro: ' + error);
@@ -48,7 +48,7 @@ export default function Configuracoes() {
 
     const handleEdit = async (id, diaria, hora, mensal, limpezaCompleta, limpezaExterna, limpezaInterna) => {
         try {
-            await axios.put(`https://localhost:5001/api/Configuracoes/${id}`, {
+            await axios.put(`https://localhost:44311/api/Configuracoes/${id}`, {
                 id: id,
                 diaria: diaria,
                 hora: hora,
@@ -58,7 +58,7 @@ export default function Configuracoes() {
                 limpezaInterna: limpezaInterna
             });
 
-            const result = await axios('https://localhost:5001/api/Configuracoes');
+            const result = await axios('https://localhost:44311/api/Configuracoes');
             setData(result.data);
         } catch (error) {
             console.error(error);

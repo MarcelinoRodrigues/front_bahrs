@@ -11,7 +11,7 @@ export default function NovoUsuario() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://localhost:5001/api/Contas', { 
+            await axios.post('https://localhost:44311/api/Contas', { 
                 nome: nome, 
                 senha: senha
             });
