@@ -12,7 +12,7 @@ export default function Funcionario() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios('https://localhost:5001/api/Funcionarios');
+            const result = await axios('https://localhost:44311/api/Funcionarios');
             setData(result.data);
         };
         fetchData();
@@ -25,10 +25,10 @@ export default function Funcionario() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://localhost:5001/api/Funcionarios', { nome });
+            await axios.post('https://localhost:44311/api/Funcionarios', { nome });
             toggleModal();
 
-            const result = await axios('https://localhost:5001/api/Funcionarios');
+            const result = await axios('https://localhost:44311/api/Funcionarios');
             setData(result.data);
         } catch (error) {
             console.error(error);
@@ -37,8 +37,8 @@ export default function Funcionario() {
 
     const handleRemoveSubmit = async (id) => {
         try {
-            await axios.delete(`https://localhost:5001/api/Funcionarios/${id}`);
-            const result = await axios('https://localhost:5001/api/Funcionarios');
+            await axios.delete(`https://localhost:44311/api/Funcionarios/${id}`);
+            const result = await axios('https://localhost:44311/api/Funcionarios');
             setData(result.data);
         } catch (error) {
             console.error(error);
@@ -47,12 +47,12 @@ export default function Funcionario() {
 
     const handleEdit = async (id, nome) => {
         try {
-            await axios.put(`https://localhost:5001/api/Funcionarios/${id}`, {
+            await axios.put(`https://localhost:44311/api/Funcionarios/${id}`, {
                 id: id,
                 Nome: nome,
             });
             
-            const result = await axios('https://localhost:5001/api/Funcionarios');
+            const result = await axios('https://localhost:44311/api/Funcionarios');
             setData(result.data);
         } catch (error) {
             console.error(error);

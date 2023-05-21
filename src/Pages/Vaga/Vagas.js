@@ -12,7 +12,7 @@ export default function Vaga(){
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await axios('https://localhost:5001/api/Vagas');
+            const result = await axios('https://localhost:44311/api/Vagas');
             setData(result.data);
         };
         fetchData();
@@ -25,10 +25,10 @@ export default function Vaga(){
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://localhost:5001/api/Vagas', { nome });
+            await axios.post('https://localhost:44311/api/Vagas', { nome });
             toggleModal();
             
-            const result = await axios('https://localhost:5001/api/Vagas');
+            const result = await axios('https://localhost:44311/api/Vagas');
             setData(result.data);
         } catch (error) {
           console.error(error);
@@ -37,8 +37,8 @@ export default function Vaga(){
 
     const handleRemove = async (id) => {
         try {
-            await axios.delete(`https://localhost:5001/api/Vagas/${id}`);
-            const result = await axios('https://localhost:5001/api/Vagas');
+            await axios.delete(`https://localhost:44311/api/Vagas/${id}`);
+            const result = await axios('https://localhost:44311/api/Vagas');
             setData(result.data);
         } catch (error) {
             console.error(error);
@@ -47,13 +47,13 @@ export default function Vaga(){
 
     const handleEdit = async (id, nome, status) => {
         try {
-            await axios.put(`https://localhost:5001/api/Vagas/${id}`, {
+            await axios.put(`https://localhost:44311/api/Vagas/${id}`, {
                 id: id,
                 Nome: nome,
                 Status: status
             });
             
-            const result = await axios('https://localhost:5001/api/Vagas');
+            const result = await axios('https://localhost:44311/api/Vagas');
             setData(result.data);
         } catch (error) {
             console.error(error);

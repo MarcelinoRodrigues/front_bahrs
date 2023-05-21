@@ -23,17 +23,17 @@ export default function NovoEstacionamento() {
 
     useEffect(() => {
         const fetchVagas = async () => {
-            const response = await fetch('https://localhost:5001/api/Vagas/Status');
+            const response = await fetch('https://localhost:44311/api/Vagas/Status');
             const data = await response.json();
             setVaga(data);
         };
         const fetchFuncionarios = async () => {
-            const response = await fetch('https://localhost:5001/api/Funcionarios');
+            const response = await fetch('https://localhost:44311/api/Funcionarios');
             const data = await response.json();
             setFuncionarios(data);
         };
         const fetchMensalistas = async () => {
-            const response = await fetch('https://localhost:5001/api/Mensalistas');
+            const response = await fetch('https://localhost:44311/api/Mensalistas');
             const data = await response.json();
             setMensalistas(data);
         };
@@ -67,7 +67,7 @@ export default function NovoEstacionamento() {
         let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
 
         try {
-            await axios.post("https://localhost:5001/api/Estacionamento/", {
+            await axios.post("https://localhost:44311/api/Estacionamento/", {
                 id: 0,
                 Entrada: date,
                 Vaga: null,
