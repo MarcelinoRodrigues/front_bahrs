@@ -5,14 +5,7 @@ import Nav from "../../components/Nav";
 
 export default function Configuracoes() {
     const [data, setData] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [diaria, setDiaria] = useState('');
-    const [hora, setHora] = useState('');
-    const [mensal, setMensal] = useState('');
-    const [limpezaCompleta, setLimpezaCompleta] = useState('');
-    const [limpezaExterna, setLimpezaExterna] = useState('');
-    const [limpezaInterna, setLimpezaInterna] = useState('');
     const [editdiaria, setEditDiaria] = useState(null);
     const [edithora, setEditHora] = useState(null);
     const [editmensal, setEditMensal] = useState(null);
@@ -28,23 +21,6 @@ export default function Configuracoes() {
 
         fetchData();
     }, []);
-
-    const toggleModal = () => {
-        setModalOpen(!modalOpen);
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post('https://localhost:44311/api/Configuracoes', { diaria });
-            toggleModal();
-
-            const result = await axios('https://localhost:44311/api/Configuracoes');
-            setData(result.data);
-        } catch (error) {
-            alert('Erro no servidor, descrição do erro: ' + error);
-        }
-    };
 
     const handleEdit = async (id, diaria, hora, mensal, limpezaCompleta, limpezaExterna, limpezaInterna) => {
         try {
@@ -68,68 +44,6 @@ export default function Configuracoes() {
     return (
         <div className="main">
             <Nav />
-            <Button
-                type='submit'
-                backgroundColor="#90EE90"
-                onClick={toggleModal}
-            >
-                Adicionar +
-            </Button>
-            {modalOpen && (
-                <ModalWrapper>
-                    <ModalContent>
-                        <h2>Novo Registro</h2>
-                        <form onSubmit={handleSubmit}>
-                            <input
-                                type="text"
-                                name="diaria"
-                                placeholder='Diaria'
-                                value={diaria}
-                                autocomplete="off"
-                                onChange={(e) => setDiaria(e.target.value)} />
-                            <input
-                                type="text"
-                                name="hora"
-                                placeholder='hora'
-                                value={hora}
-                                autocomplete="off"
-                                onChange={(e) => setHora(e.target.value)} />
-                            <input
-                                type="text"
-                                name="mensal"
-                                placeholder='Mensal'
-                                value={mensal}
-                                autocomplete="off"
-                                onChange={(e) => setMensal(e.target.value)} />
-                            <input
-                                type="text"
-                                name="limpezaCompleta"
-                                placeholder='Limpeza Completa'
-                                value={limpezaCompleta}
-                                autocomplete="off"
-                                onChange={(e) => setLimpezaCompleta(e.target.value)} />
-                            <input
-                                type="text"
-                                name="limpezaExterna"
-                                placeholder='Limpeza Externa'
-                                value={limpezaExterna}
-                                autocomplete="off"
-                                onChange={(e) => setLimpezaExterna(e.target.value)} />
-                            <input
-                                type="text"
-                                name="limpezaInterna"
-                                placeholder='Limpeza Interna'
-                                value={limpezaInterna}
-                                autocomplete="off"
-                                onChange={(e) => setLimpezaInterna(e.target.value)} />
-                            <button type="submit">Incluir</button>
-                            <button type="button" onClick={toggleModal}>
-                                Fechar
-                            </button>
-                        </form>
-                    </ModalContent>
-                </ModalWrapper>
-            )}
             <Table>
                 <THead>
                     <tr>
@@ -211,7 +125,7 @@ export default function Configuracoes() {
                                     backgroundColor="#90EE90"
                                     onClick={() => setShowModal(true)}
                                 >
-                                    Editar
+                                    Configurar
                                 </Button>
                             </TDFlex>
                         </TR>
