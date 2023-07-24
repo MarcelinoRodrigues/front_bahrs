@@ -129,6 +129,7 @@ export default function Funcionario() {
                                 <Button
                                     type='submit'
                                     backgroundColor="#FF6347"
+                                    marginLeft="13px"
                                     onClick={() => handleRemoveSubmit(item.id)}
                                 >
                                     Excluir

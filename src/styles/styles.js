@@ -10,7 +10,7 @@ export const Button = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  width: 100%;
+  margin-left: ${props => props.marginLeft}; 
   margin-bottom: 10px;
   :hover {
     background-color: ${props => props.backgroundColor}; 
@@ -119,7 +119,6 @@ export const DropdownLink = styled(NavLink)`
 //Historico grid
 export const Table = styled.table`
   width: 100%;
-  border-collapse: collapse;
 `;
 
 export const THead = styled.thead`
@@ -128,9 +127,6 @@ export const THead = styled.thead`
 `;
 
 export const TH = styled.th`
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
 `;
 
 export const THCenter = styled.th`
@@ -138,6 +134,7 @@ export const THCenter = styled.th`
   text-align: left;
   border-bottom: 1px solid #ddd;
   text-align: center;
+  width: 40%;
 `;
 
 export const TBody = styled.tbody`
@@ -151,6 +148,7 @@ export const TD = styled.td`
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
+  text-align: center;
 `;
 
 export const TDFlex = styled.td`
@@ -158,15 +156,14 @@ export const TDFlex = styled.td`
     text-align: left;
     border-bottom: 1px solid #ddd;
     display:flex;
+    justify-content: center;
 `;
 
 export const TDConditional = styled.td`
   padding: 8px;
   text-align: center;
-  border-bottom: 1px solid #ddd;
-  background-color: ${props => (props.status === 0 ? 'green' : 'red')};
+  background-color: ${props => (props.status === 0 ? '#90EE90' : '#FF6347')};
   width: 100px;
-  color: white;
 `;
 
 //Modal
