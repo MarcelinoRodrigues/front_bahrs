@@ -221,6 +221,7 @@ export default function Estacionamento() {
                                         type='submit'
                                         backgroundColor="#191970"
                                         color='white'
+                                        marginLeft="13px"
                                         onClick={() => ExecuteExit(item.id)}
                                     >
                                         Saída
@@ -228,6 +229,7 @@ export default function Estacionamento() {
                                     <Button
                                         type='submit'
                                         backgroundColor="#90EE90"
+                                        marginLeft="13px"
                                         onClick={() => setShowModal(true)}
                                     >
                                         Editar
@@ -235,6 +237,7 @@ export default function Estacionamento() {
                                     <Button
                                         type='submit'
                                         backgroundColor="#FF6347"
+                                        marginLeft="13px"
                                         onClick={() => handleRemove(item.id)}
                                     >
                                         Excluir

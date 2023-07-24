@@ -134,6 +134,7 @@ export default function Vaga(){
                                 <Button
                                     type='submit'
                                     backgroundColor="#FF6347"
+                                    marginLeft="13px"
                                     onClick={() => handleRemove(item.id)}
                                 >
                                     Excluir

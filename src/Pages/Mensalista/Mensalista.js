@@ -128,6 +128,7 @@ export default function Mensalista() {
                                 </Button>
                                 <Button
                                     type='submit'
+                                    marginLeft="13px"
                                     backgroundColor="#FF6347"
                                     onClick={() => handleRemoveSubmit(item.id)}
                                 >
