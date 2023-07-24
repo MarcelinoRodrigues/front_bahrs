@@ -179,7 +179,7 @@ export default function NovoEstacionamento() {
                         onClick={
                             () =>
                                 HandleSubmit(date,
-                                    selectedMensalista,
+                                    selectedMensalista !== "" ? selectedMensalista : null,
                                     sendPlaca,
                                     selectedFuncionario,
                                     selectedVaga,
