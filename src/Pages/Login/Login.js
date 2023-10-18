@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Login, FormCard, InputForm, Button, StyledNavLink } from '../../styles/styles';
+import { Login, FormCard, InputForm, Button, StyledNavLink, LabelText, ContainerLink } from '../../styles/styles';
 import api from '../../services/api';
 
 export default function LoginForm() {
@@ -41,6 +41,7 @@ export default function LoginForm() {
     return (
         <Login>
             <FormCard>
+                <LabelText>BaseCar</LabelText>
                 <form onSubmit={handleSubmit}>
                     <InputForm
                         type="text"
@@ -61,8 +62,10 @@ export default function LoginForm() {
                     <Button type='submit' backgroundColor="#FFC312" color='black'>
                         Entrar
                     </Button>
-                    <StyledNavLink to={"/novoUsuario"}>Novo Usuario</StyledNavLink>
-                    <StyledNavLink to={"/"}>Esqueceu a senha?</StyledNavLink>
+                    <ContainerLink>
+                        <StyledNavLink to={"/novoUsuario"}>Novo Usuario</StyledNavLink>
+                        <StyledNavLink to={"/"}>Esqueceu a senha?</StyledNavLink>
+                    </ContainerLink>
                 </form>
             </FormCard>
         </Login>

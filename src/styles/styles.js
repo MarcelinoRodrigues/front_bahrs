@@ -6,7 +6,7 @@ import styled from 'styled-components';
 export const Button = styled.button`
   background-color: ${props => props.backgroundColor}; 
   color: ${props => props.color};
-  padding: 12px 20px;
+  padding: 12px 50px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -15,6 +15,14 @@ export const Button = styled.button`
   :hover {
     background-color: ${props => props.backgroundColor}; 
   }
+`;
+
+export const LabelText = styled.h1`
+    color: #fff;
+`;
+
+export const ContainerLink = styled.div`
+    display:grid;
 `;
 
 export const Login = styled.div`
@@ -36,25 +44,26 @@ export const Login = styled.div`
 //Nav
 export const FormCard = styled.div`
     margin: auto;
-    width: 300px;
+    width: 400px;
     background-color: rgba(0,0,0,0.5) !important;
-    padding: 50px;
+    padding: 25px 50px 24px 50px;
 `;
 
 export const InputForm = styled.input`
     text-align: center;
     width: 95%;
     margin: 0 0 01em 0;
-    padding: 5px;
+    padding: 9px;
     border-radius: 25px;
 `;
 
 export const StyledNavLink = styled(NavLink)`
   color: white;
   text-decoration: none;
-  margin: 1em;
+  margin: 0.6em;
   &:hover {
     text-decoration: underline;
+    color: #000
   }
 `;
 
