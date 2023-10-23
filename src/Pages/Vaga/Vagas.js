@@ -37,9 +37,17 @@ export default function Vaga(){
 
     const handleRemove = async (id) => {
         try {
-            await axios.delete(`https://localhost:44311/api/Vagas/${id}`);
             const result = await axios('https://localhost:44311/api/Vagas');
-            setData(result.data);
+
+            const vagaOcupada = result.data.find(e => e.id === id && e.status === 1);
+
+            vagaOcupada
+            ? alert("A vaga está ocupada")
+            : await axios.delete(`https://localhost:44311/api/Vagas/${id}`);
+
+            const reload = await axios('https://localhost:44311/api/Vagas');
+                setData(reload.data);
+                
         } catch (error) {
             console.error(error);
         }
@@ -49,8 +57,8 @@ export default function Vaga(){
         try {
             await axios.put(`https://localhost:44311/api/Vagas/${id}`, {
                 id: id,
-                Nome: nome,
-                Status: status
+                nome: nome,
+                status: status
             });
             
             const result = await axios('https://localhost:44311/api/Vagas');

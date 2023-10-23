@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Table, TBody, TD, TH, THead, TR } from '../../styles/styles';
 import Nav from '../../components/Nav';
 import moment from 'moment';
-import { Button, Dropdown, FilterContainer, Input } from './styles';
+import { Button, Dropdown, FilterContainer, Input, ManagerTable } from './styles';
 
 export default function Historico() {
     const [data, setData] = useState([]);
@@ -77,34 +77,36 @@ export default function Historico() {
                 />
                 <Button onClick={handleSubmit}>Pesquisar</Button>
             </FilterContainer>
-            <Table>
-                <THead>
-                    <tr>
-                        <TH>Entrada</TH>
-                        <TH>Saida</TH>
-                        <TH>Vaga</TH>
-                        <TH>Placa</TH>
-                        <TH>Funcionario</TH>
-                        <TH>Mensalista</TH>
-                        <TH>Valor</TH>
-                        <TH>Limpeza</TH>
-                    </tr>
-                </THead>
-                <TBody>
-                    {data.map((item) => (
-                        <TR key={item.id}>
-                            <TD>{moment(item.entrada).format('DD-MM-YYYY HH:mm')}</TD>
-                            <TD>{moment(item.saida).format('DD-MM-YYYY HH:mm')}</TD>
-                            <TD>{item.vaga}</TD>
-                            <TD>{item.placa}</TD>
-                            <TD>{item.funcionario}</TD>
-                            <TD>{item.mensalista}</TD>
-                            <TD>{item.valor}$</TD>
-                            <TD>{item.limpeza}</TD>
+            <ManagerTable>
+                <Table>
+                    <THead>
+                        <TR>
+                            <TH>Entrada</TH>
+                            <TH>Saida</TH>
+                            <TH>Vaga</TH>
+                            <TH>Placa</TH>
+                            <TH>Funcionario</TH>
+                            <TH>Mensalista</TH>
+                            <TH>Valor</TH>
+                            <TH>Limpeza</TH>
                         </TR>
-                    ))}
-                </TBody>
-            </Table>
+                    </THead>
+                        <TBody>
+                            {data.map((item) => (
+                                <TR key={item.id}>
+                                    <TD>{moment(item.entrada).format('DD-MM-YYYY HH:mm')}</TD>
+                                    <TD>{moment(item.saida).format('DD-MM-YYYY HH:mm')}</TD>
+                                    <TD>{item.vaga}</TD>
+                                    <TD>{item.placa}</TD>
+                                    <TD>{item.funcionario}</TD>
+                                    <TD>{item.mensalista}</TD>
+                                    <TD>{item.valor}$</TD>
+                                    <TD>{item.limpeza}</TD>
+                                </TR>
+                            ))}
+                        </TBody>
+                </Table>
+            </ManagerTable>
         </div>
     )
 }
