@@ -4,7 +4,6 @@ import {
     Route
 } from 'react-router-dom';
 import Login from './Pages/Login/Login';
-import Nav from './components/Nav';
 import Historico from './Pages/Historico/Historico';
 import Mensalista from './Pages/Mensalista/Mensalista';
 import Configuracoes from './Pages/Configuracao/Configuracoes';
@@ -14,13 +13,14 @@ import Estacionamento from './Pages/Estacionamento/Estacionamento';
 
 import NovoUsuario from './Pages/NovoUsuario/NovoUsuario';
 import NovoEstacionamento from './Pages/Estacionamento/NovoEstacionamento/NovoEstacionamento';
+import Dashboard from './Pages/Dashboard/Dashboard';
 
 export default function Routes_App() {
     return (
         <Router>
             <Routes>
                 <Route path="/" exact element={<Login />} />
-                <Route path="/nav" element={<Nav/>} />
+                <Route path="/dashboard" exact element={<Dashboard />} />
                 <Route path='/historico' element={<Historico/>}/>
                 <Route path='/mensalista' element={<Mensalista/>}/>
                 <Route path='/configuracoes' element={<Configuracoes/>}/>

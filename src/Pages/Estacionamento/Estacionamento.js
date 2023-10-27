@@ -41,7 +41,7 @@ export default function Estacionamento() {
             const verificaSaida = result.data.find(e => e.id === id && e.vencimento === null);
 
             verificaSaida
-            ? alert("O estacionamento não pode ser excluido sem marcar saída antes")
+            ? alert("O estacionamento não pode ser removido sem marcar saída antes")
             : await axios.delete(`https://localhost:44311/api/Estacionamento/${id}`);
 
             const reload = await axios('https://localhost:44311/api/Estacionamento');
@@ -246,7 +246,7 @@ export default function Estacionamento() {
                                         marginLeft="13px"
                                         onClick={() => handleRemove(item.id)}
                                     >
-                                        Excluir
+                                        Remover
                                     </Button>
                                 </TDFlex>
                             </TR>

@@ -8,6 +8,9 @@ export default function Nav() {
     return (
         <StyledNavBar>
             <Dropdown>
+                <StyledNavLink to="/dashboard" onClick={() => setIsOpen(!isOpen)}>Dashboard</StyledNavLink>
+            </Dropdown>
+            <Dropdown>
                 <StyledNavLink to="/estacionamento" onClick={() => setIsOpen(!isOpen)}>Estacionamento</StyledNavLink>
                 <DropdownContent className={isOpen ? "dropdown-content" : "dropdown-content hidden"}>
                     <DropdownLink to="/funcionario">Funcionário</DropdownLink>
