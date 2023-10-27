@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
+import { Button, Input, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
 import Nav from "../../components/Nav";
 
 export default function Configuracoes() {
@@ -41,6 +41,10 @@ export default function Configuracoes() {
         }
     };
 
+    const ReloadClose = () => {
+        setShowModal(false)
+    }
+
     return (
         <div className="main">
             <Nav />
@@ -71,51 +75,57 @@ export default function Configuracoes() {
                                         <ModalContent>
                                             <h2>Editar</h2>
                                             <form>
-                                                <input
+                                                <label>Diaria</label>
+                                                <Input
                                                     type="text"
                                                     name="diaria"
-                                                    placeholder="diaria"
+                                                    placeholder={item.diaria}
                                                     value={editdiaria}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditDiaria(e.target.value)} />
-                                                    <input
+                                                <label>Valor Por hora</label>
+                                                <Input
                                                     type="text"
                                                     name="hora"
                                                     required
-                                                    placeholder='hora'
+                                                    placeholder={item.hora}
                                                     value={edithora}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditHora(e.target.value)} />
-                                                    <input
+                                                <label>Valor mensal</label>
+                                                <Input
                                                     type="text"
                                                     name="mensal"
-                                                    placeholder='mensal'
+                                                    placeholder={item.mensal}
                                                     value={editmensal}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditMensal(e.target.value)} />
-                                                    <input
+                                                <label>Limpeza completa</label>
+                                                <Input
                                                     type="text"
                                                     name="limpezaCompleta"
-                                                    placeholder='limpezaCompleta'
+                                                    placeholder={item.limpezaCompleta}
                                                     value={editlimpezaCompleta}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditLimpezaCompleta(e.target.value)} />
-                                                    <input
+                                                <label>Limpeza externa</label>
+                                                <Input
                                                     type="text"
                                                     name="limpezaExterna"
-                                                    placeholder='limpezaExterna'
+                                                    placeholder={item.limpezaExterna}
                                                     value={editlimpezaExterna}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditLimpezaExterna(e.target.value)} />
-                                                    <input
+                                                <label>Limpeza interna</label>
+                                                <Input
                                                     type="text"
                                                     name="limpezaInterna"
-                                                    placeholder='limpezaInterna'
+                                                    placeholder={item.limpezaInterna}
                                                     value={editlimpezaInterna}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditLimpezaInterna(e.target.value)} />
                                                 <button type="submit" onClick={() => handleEdit(item.id, editdiaria,edithora,editmensal,editlimpezaCompleta,editlimpezaExterna,editlimpezaInterna)}>Alterar</button>
-                                                <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
+                                                <button type="button" onClick={() => ReloadClose()}>Fechar</button>
                                             </form>
                                         </ModalContent>
                                     </ModalWrapper>

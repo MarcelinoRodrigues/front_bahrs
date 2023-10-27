@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, ButtonNav, H5, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
+import { Button, ButtonNav, H5, Input, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
 import Nav from "../../components/Nav";
 import { Limpeza } from '../../services/Traducoes';
 import moment from 'moment';
@@ -37,9 +37,15 @@ export default function Estacionamento() {
 
     const handleRemove = async (id) => {
         try {
-            await axios.delete(`https://localhost:44311/api/Estacionamento/${id}`);
             const result = await axios('https://localhost:44311/api/Estacionamento');
-            setData(result.data);
+            const verificaSaida = result.data.find(e => e.id === id && e.vencimento === null);
+
+            verificaSaida
+            ? alert("O estacionamento não pode ser excluido sem marcar saída antes")
+            : await axios.delete(`https://localhost:44311/api/Estacionamento/${id}`);
+
+            const reload = await axios('https://localhost:44311/api/Estacionamento');
+            setData(reload.data);
         } catch (error) {
             console.error(error);
         }
@@ -135,74 +141,74 @@ export default function Estacionamento() {
                                                     <H5>
                                                         Entrada:
                                                     </H5>
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         name="Entrada"
                                                         autoComplete='off'
-                                                        value={item.entrada}
+                                                        placeholder={item.entrada}
                                                     />
                                                     <H5>
                                                         Saída:
                                                     </H5>
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         name="Entrada"
                                                         autoComplete='off'
-                                                        value={item.vencimento}
+                                                        placeholder={item.vencimento}
                                                     />
                                                     <H5>
                                                         Valor:
                                                     </H5>
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         name="Entrada"
                                                         autoComplete='off'
-                                                        value={item.valor}
+                                                        placeholder={item.valor}
                                                     />
                                                     <H5>
                                                         Mensalista:
                                                     </H5>
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         name="Entrada"
                                                         autoComplete='off'
-                                                        value={nomeMensalista}
+                                                        placeholder={nomeMensalista}
                                                     />
                                                     <H5>
                                                         Placa:
                                                     </H5>
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         name="Entrada"
                                                         autoComplete='off'
-                                                        value={item.placa}
+                                                        placeholder={item.placa}
                                                     />
                                                     <H5>
                                                         Funcionario:
                                                     </H5>
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         name="Entrada"
                                                         autoComplete='off'
-                                                        value={nomeFuncionario}
+                                                        placeholder={nomeFuncionario}
                                                     />
                                                     <H5>
                                                         Vagas:
                                                     </H5>
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         name="Entrada"
                                                         autoComplete='off'
-                                                        value={nomeVaga}
+                                                        placeholder={nomeVaga}
                                                     />
                                                     <H5>
                                                         Limpeza:
                                                     </H5>
-                                                    <input
+                                                    <Input
                                                         type="text"
                                                         name="Entrada"
                                                         autoComplete='off'
-                                                        value={Limpeza[item.limpeza]}
+                                                        placeholder={Limpeza[item.limpeza]}
                                                     />
                                                     <button type="submit" onClick={() => handleEdit(item.id, nomeVaga, item.status)}>Alterar</button>
                                                     <button type="button" onClick={() => setShowModal(false)}>Fechar</button>

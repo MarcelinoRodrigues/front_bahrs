@@ -128,6 +128,7 @@ export const DropdownLink = styled(NavLink)`
 //Historico grid
 export const Table = styled.table`
   width: 100%;
+  background: aliceblue;
 `;
 
 export const THead = styled.thead`
@@ -150,7 +151,7 @@ export const TBody = styled.tbody`
 `;
 
 export const TR = styled.tr`
-
+    height: 40px;
 `;
 
 export const TD = styled.td`
@@ -197,7 +198,7 @@ export const ModalContent = styled.div`
   max-width: 500px;
   width: 100%;
   h2 {
-    margin-bottom: 20px;
+    margin-bottom: -13px;
     text-align: center;
   }
   form {
@@ -205,7 +206,7 @@ export const ModalContent = styled.div`
     flex-direction: column;
     input[type="text"],input[type="password"]{
         text-align:center;
-        padding:12px 20px;
+        padding:7px 0px;
         margin-bottom: 5px;
     }
     button[type="submit"] {
@@ -215,7 +216,7 @@ export const ModalContent = styled.div`
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      margin-top: 20px;
+      margin-top: 3px;
       :hover {
         background-color: #90EE90;
       }
@@ -237,4 +238,10 @@ export const ModalContent = styled.div`
 
 export const H5 = styled.h5`
   display: contents;
+`;
+
+export const Input = styled.input`
+    &::placeholder {
+        color: #000;
+    }
 `;
