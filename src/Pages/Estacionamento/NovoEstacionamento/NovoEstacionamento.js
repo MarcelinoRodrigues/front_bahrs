@@ -1,9 +1,10 @@
 import Nav from "../../../components/Nav";
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonNavLink, ContainerButton, Form, Input, Label, Option, Select } from "./styled";
+import { Button, ButtonNavLink, ContainerButton, Form, IMG, Input, Label, Option, Select } from "./styled";
 import { Limpeza } from '../../../services/Traducoes';
 import { useNavigate } from 'react-router-dom';
+import RequiredIcon from '../../../Assets/iconspontodeexclamacao.png';
 import Datetime from 'react-datetime';
 import 'react-datetime/css/react-datetime.css';
 
@@ -63,15 +64,17 @@ export default function NovoEstacionamento() {
         return resultado;
     }
 
-    const HandleSubmit = async (date, selectedMensalista, sendPlaca, selectedFuncionario, selectedVaga, sendLimpeza) => {
+    const HandleSubmit = async (e) => {
+        e.preventDefault();
         let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
+        console.log("data",date);
 
         try {
             await axios.post("https://localhost:44311/api/Estacionamento/", {
                 id: 0,
                 Entrada: date,
                 Vaga: null,
-                mensalistaId: selectedMensalista,
+                mensalistaId: selectedMensalista !== "" ? selectedMensalista : null,
                 Placa: sendPlaca,
                 valor: null,
                 FuncionarioId: selectedFuncionario,
@@ -136,15 +139,15 @@ export default function NovoEstacionamento() {
                     </Select>
                 </Label>
                 <Label>
-                    Placa:
+                    <span>Placa: </span><IMG src={RequiredIcon}></IMG>
                     <Input type="text"
                         value={sendPlaca}
                         onChange={(event) => setSendPlaca(event.target.value)}
                         required />
                 </Label>
                 <Label>
-                    Funcionario:
-                    <Select value={selectedFuncionario} onChange={(event) => setSelectedFuncionario(event.target.value)}>
+                    <span>Funcionario: </span><IMG src={RequiredIcon}></IMG>
+                    <Select value={selectedFuncionario} onChange={(event) => setSelectedFuncionario(event.target.value)} required>
                         <Option value="">Selecione uma opção</Option>
                         {funcionario.map((funcionarios) => (
                             <Option key={funcionarios.id}
@@ -156,8 +159,8 @@ export default function NovoEstacionamento() {
                     </Select>
                 </Label>
                 <Label>
-                    Vaga:
-                    <Select value={selectedVaga} onChange={(event) => setSelectedVaga(event.target.value)}>
+                    <span>Vaga: </span><IMG src={RequiredIcon}></IMG>
+                    <Select value={selectedVaga} onChange={(event) => setSelectedVaga(event.target.value)} required>
                         <Option value="">Selecione uma opção</Option>
                         {vaga.map((vagas) => (
                             <Option key={vagas.id}
@@ -176,15 +179,7 @@ export default function NovoEstacionamento() {
                 <ContainerButton>
                     <Button backgroundColor="#90EE90"
                         color="Black"
-                        onClick={
-                            () =>
-                                HandleSubmit(date,
-                                    selectedMensalista !== "" ? selectedMensalista : null,
-                                    sendPlaca,
-                                    selectedFuncionario,
-                                    selectedVaga,
-                                    sendLimpeza)
-                        } >Criar</Button>
+                        onClick={ () => HandleSubmit()} >Criar</Button>
                     <ButtonNavLink to="/estacionamento" color="Black" >Voltar</ButtonNavLink>
                 </ContainerButton>
             </Form>

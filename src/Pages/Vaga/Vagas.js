@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, ModalContent, ModalWrapper, Table, TBody, TD, TDConditional, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
 import Nav from "../../components/Nav";
+import { H2 } from './styles';
 
 export default function Vaga(){
     const [data, setData] = useState([]);
@@ -81,7 +82,7 @@ export default function Vaga(){
             {modalOpen && (
                 <ModalWrapper>
                     <ModalContent>
-                        <h2>Novo Registro</h2>
+                        <H2>Novo Registro</H2>
                         <form onSubmit={handleSubmit}>
                             <input 
                                 type="text" 
@@ -117,7 +118,7 @@ export default function Vaga(){
                                 {showModal && (
                                     <ModalWrapper>
                                         <ModalContent>
-                                            <h2>Editar</h2>
+                                            <H2>Editar</H2>
                                             <form>
                                                 <input
                                                     type="text"

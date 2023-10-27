@@ -79,3 +79,9 @@ export const Select = styled.select`
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   width: 100%;
 `;
+
+export const IMG = styled.img`
+    width: 25px;
+    height: 25px;
+    margin-bottom: -6px;
+`;
