@@ -65,9 +65,7 @@ export default function NovoEstacionamento() {
     }
 
     const HandleSubmit = async (e) => {
-        e.preventDefault();
         let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
-        console.log("data",date);
 
         try {
             await axios.post("https://localhost:44311/api/Estacionamento/", {

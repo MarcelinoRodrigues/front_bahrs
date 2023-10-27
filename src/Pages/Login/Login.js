@@ -25,7 +25,7 @@ export default function LoginForm() {
                     const user = response.data.find(item =>
                         item.nome === formData.username && item.senha === formData.password);
                     if (user) {
-                        redirectNavigate("/nav");
+                        redirectNavigate("/dashboard");
                     } else {
                         alert("Informe Usuário ou senha validos");
                     }
