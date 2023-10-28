@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, ModalContent, ModalWrapper, Table, TBody, TD, TDConditional, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
+import { Button, H2, ManagerTable, ModalContent, ModalWrapper, Table, TBody, TD, TDConditional, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
 import Nav from "../../components/Nav";
-import { H2 } from './styles';
 
 export default function Vaga(){
     const [data, setData] = useState([]);
@@ -99,60 +98,62 @@ export default function Vaga(){
                     </ModalContent>
                 </ModalWrapper>
             )}
-            <Table>
-                <THead>
-                    <tr>
-                        <TH>Nome</TH>
-                        <TH>Status</TH>
-                        <THCenter>Ações</THCenter>
-                    </tr>
-                </THead>
-                <TBody>
-                    {data.map((item) => (
-                        <TR key={item.id}>
-                            <TD>{item.nome}</TD>
-                            <TDConditional status={item.status}>
-                                {item.status === 0 ? 'Ativo' : 'Ocupado'}
-                            </TDConditional>
-                            <TDFlex>
-                                {showModal && (
-                                    <ModalWrapper>
-                                        <ModalContent>
-                                            <H2>Editar</H2>
-                                            <form>
-                                                <input
-                                                    type="text"
-                                                    name="nomeVaga"
-                                                    placeholder='Nome'
-                                                    value={nomeVaga}
-                                                    autocomplete="off"
-                                                    onChange={(e) => setNomeVaga(e.target.value)} />
-                                                <button type="submit" onClick={() => handleEdit(item.id, nomeVaga,item.status)}>Alterar</button>
-                                                <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
-                                            </form>
-                                        </ModalContent>
-                                    </ModalWrapper>
-                                )}
-                                <Button
-                                    type='submit'
-                                    backgroundColor="#90EE90"
-                                    onClick={() => setShowModal(true)}
-                                >
-                                    Editar
-                                </Button>
-                                <Button
-                                    type='submit'
-                                    backgroundColor="#FF6347"
-                                    marginLeft="13px"
-                                    onClick={() => handleRemove(item.id)}
-                                >
-                                    Excluir
-                                </Button>
-                            </TDFlex>
-                        </TR>
-                    ))}
-                </TBody>
-            </Table>
+            <ManagerTable>
+                <Table>
+                    <THead>
+                        <tr>
+                            <TH>Nome</TH>
+                            <TH>Status</TH>
+                            <THCenter>Ações</THCenter>
+                        </tr>
+                    </THead>
+                    <TBody>
+                        {data.map((item) => (
+                            <TR key={item.id}>
+                                <TD>{item.nome}</TD>
+                                <TDConditional status={item.status}>
+                                    {item.status === 0 ? 'Ativo' : 'Ocupado'}
+                                </TDConditional>
+                                <TDFlex>
+                                    {showModal && (
+                                        <ModalWrapper>
+                                            <ModalContent>
+                                                <H2>Editar</H2>
+                                                <form>
+                                                    <input
+                                                        type="text"
+                                                        name="nomeVaga"
+                                                        placeholder='Nome'
+                                                        value={nomeVaga}
+                                                        autocomplete="off"
+                                                        onChange={(e) => setNomeVaga(e.target.value)} />
+                                                    <button type="submit" onClick={() => handleEdit(item.id, nomeVaga,item.status)}>Alterar</button>
+                                                    <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
+                                                </form>
+                                            </ModalContent>
+                                        </ModalWrapper>
+                                    )}
+                                    <Button
+                                        type='submit'
+                                        backgroundColor="#90EE90"
+                                        onClick={() => setShowModal(true)}
+                                    >
+                                        Editar
+                                    </Button>
+                                    <Button
+                                        type='submit'
+                                        backgroundColor="#FF6347"
+                                        marginLeft="13px"
+                                        onClick={() => handleRemove(item.id)}
+                                    >
+                                        Excluir
+                                    </Button>
+                                </TDFlex>
+                            </TR>
+                        ))}
+                    </TBody>
+                </Table>
+            </ManagerTable>
         </div>
     );
 }

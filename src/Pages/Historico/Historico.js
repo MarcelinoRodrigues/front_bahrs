@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table, TBody, TD, TH, THead, TR } from '../../styles/styles';
+import { ManagerTable, Table, TBody, TD, TH, THead, TR } from '../../styles/styles';
 import Nav from '../../components/Nav';
 import moment from 'moment';
-import { Button, Dropdown, FilterContainer, Input, ManagerTable } from './styles';
+import { Button, Dropdown, FilterContainer, Input } from './styles';
 
 export default function Historico() {
     const [data, setData] = useState([]);

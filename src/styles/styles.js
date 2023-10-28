@@ -78,6 +78,7 @@ background-color: ${props => props.backgroundColor};
   text-decoration: none;
   display: block;
   text-align: center;
+  width: 10%;
   :hover {
     background-color: ${props => props.backgroundColor}; 
   }
@@ -244,4 +245,15 @@ export const Input = styled.input`
     &::placeholder {
         color: #000;
     }
+`;
+
+export const ManagerTable = styled.div`
+    height: 440px;
+    overflow-x: hidden;
+`;
+
+export const H2 = styled.h2`
+{
+    margin-bottom: 13px!important;
+}
 `;

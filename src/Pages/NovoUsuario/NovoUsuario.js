@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ModalContent, ModalWrapper } from "../../styles/styles";
+import { H2, ModalContent, ModalWrapper } from "../../styles/styles";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
@@ -33,7 +33,7 @@ export default function NovoUsuario() {
         <div className="main">
             <ModalWrapper>
                     <ModalContent>
-                        <h2>Novo Usuário</h2>
+                        <H2>Novo Usuário</H2>
                         <form onSubmit={handleSubmit}>
                             <input
                                 type="text"

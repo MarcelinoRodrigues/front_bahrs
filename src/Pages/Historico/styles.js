@@ -64,8 +64,3 @@ export const Button = styled.button`
     box-shadow: 0 0 4px rgba(0, 179, 0, 0.4);
     }
 `;
-
-export const ManagerTable = styled.div`
-    height: 440px;
-    overflow-x: hidden;
-`;
