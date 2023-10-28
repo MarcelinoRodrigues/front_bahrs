@@ -65,6 +65,7 @@ export default function NovoEstacionamento() {
     }
 
     const HandleSubmit = async (e) => {
+        e.preventDefault();
         let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
 
         try {
@@ -80,12 +81,16 @@ export default function NovoEstacionamento() {
                 Limpeza: setarLimpeza
             });
 
-            navigate('/estacionamento');
+            RevolvePath();
+
         } catch (error) {
             console.log(error);
-            navigate('/novoestacionamento');
         }
     };
+
+    function RevolvePath(){
+        return navigate('/estacionamento');
+    }
 
     const options = Object.keys(Limpeza).map((key) => (
         <Option key={key} value={Limpeza[key]}>
@@ -96,7 +101,7 @@ export default function NovoEstacionamento() {
     return (
         <div className="main">
             <Nav />
-            <Form>
+            <Form onSubmit={HandleSubmit}>
                 <Label>
                     Entrada:
                     <Datetime
@@ -177,7 +182,7 @@ export default function NovoEstacionamento() {
                 <ContainerButton>
                     <Button backgroundColor="#90EE90"
                         color="Black"
-                        onClick={ () => HandleSubmit()} >Criar</Button>
+                        type="submit" >Criar</Button>
                     <ButtonNavLink to="/estacionamento" color="Black" >Voltar</ButtonNavLink>
                 </ContainerButton>
             </Form>

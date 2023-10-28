@@ -146,7 +146,8 @@ export default function Estacionamento() {
                                                             type="text"
                                                             name="Entrada"
                                                             autoComplete='off'
-                                                            placeholder={item.entrada}
+                                                            placeholder={moment(item.entrada).format('DD-MM-YYYY HH:mm')}
+                                                            disabled
                                                         />
                                                         <H5>
                                                             Saída:
@@ -155,7 +156,8 @@ export default function Estacionamento() {
                                                             type="text"
                                                             name="Entrada"
                                                             autoComplete='off'
-                                                            placeholder={item.vencimento}
+                                                            placeholder={moment(item.vencimento).format('DD-MM-YYYY HH:mm')}
+                                                            disabled
                                                         />
                                                         <H5>
                                                             Valor:
@@ -165,6 +167,7 @@ export default function Estacionamento() {
                                                             name="Entrada"
                                                             autoComplete='off'
                                                             placeholder={item.valor}
+                                                            disabled
                                                         />
                                                         <H5>
                                                             Mensalista:
@@ -174,6 +177,7 @@ export default function Estacionamento() {
                                                             name="Entrada"
                                                             autoComplete='off'
                                                             placeholder={nomeMensalista}
+                                                            disabled
                                                         />
                                                         <H5>
                                                             Placa:
@@ -192,6 +196,7 @@ export default function Estacionamento() {
                                                             name="Entrada"
                                                             autoComplete='off'
                                                             placeholder={nomeFuncionario}
+                                                            disabled
                                                         />
                                                         <H5>
                                                             Vagas:
@@ -201,6 +206,7 @@ export default function Estacionamento() {
                                                             name="Entrada"
                                                             autoComplete='off'
                                                             placeholder={nomeVaga}
+                                                            disabled
                                                         />
                                                         <H5>
                                                             Limpeza:
@@ -210,6 +216,7 @@ export default function Estacionamento() {
                                                             name="Entrada"
                                                             autoComplete='off'
                                                             placeholder={Limpeza[item.limpeza]}
+                                                            disabled
                                                         />
                                                         <button type="submit" onClick={() => handleEdit(item.id, nomeVaga, item.status)}>Alterar</button>
                                                         <button type="button" onClick={() => setShowModal(false)}>Fechar</button>

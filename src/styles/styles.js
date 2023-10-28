@@ -78,6 +78,7 @@ background-color: ${props => props.backgroundColor};
   text-decoration: none;
   display: block;
   text-align: center;
+  width: 10%;
   :hover {
     background-color: ${props => props.backgroundColor}; 
   }
