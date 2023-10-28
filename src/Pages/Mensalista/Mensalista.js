@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
+import { Button, H2, ManagerTable, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
 import Nav from "../../components/Nav";
 
 export default function Mensalista() {
@@ -72,7 +72,7 @@ export default function Mensalista() {
             {modalOpen && (
                 <ModalWrapper>
                     <ModalContent>
-                        <h2>Novo Registro</h2>
+                        <H2>Novo Registro</H2>
                         <form onSubmit={handleSubmit}>
                             <input
                                 type="text"
@@ -89,56 +89,58 @@ export default function Mensalista() {
                     </ModalContent>
                 </ModalWrapper>
             )}
-            <Table>
-                <THead>
-                    <tr>
-                        <TH>Nome</TH>
-                        <THCenter>Ações</THCenter>
-                    </tr>
-                </THead>
-                <TBody>
-                    {data.map((item) => (
-                        <TR key={item.id}>
-                            <TD>{item.nome}</TD>
-                            <TDFlex>
-                                {showModal && (
-                                    <ModalWrapper>
-                                        <ModalContent>
-                                            <h2>Editar</h2>
-                                            <form>
-                                                <input
-                                                    type="text"
-                                                    name="nomeMensalista"
-                                                    placeholder='Nome'
-                                                    value={nomeMensalista}
-                                                    autocomplete="off"
-                                                    onChange={(e) => setNomeMensalista(e.target.value)} />
-                                                <button type="submit" onClick={() => handleEdit(item.id, nomeMensalista)}>Alterar</button>
-                                                <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
-                                            </form>
-                                        </ModalContent>
-                                    </ModalWrapper>
-                                )}
-                                <Button
-                                    type='submit'
-                                    backgroundColor="#90EE90"
-                                    onClick={() => setShowModal(true)}
-                                >
-                                    Editar
-                                </Button>
-                                <Button
-                                    type='submit'
-                                    marginLeft="13px"
-                                    backgroundColor="#FF6347"
-                                    onClick={() => handleRemoveSubmit(item.id)}
-                                >
-                                    Excluir
-                                </Button>
-                            </TDFlex>
-                        </TR>
-                    ))}
-                </TBody>
-            </Table>
+            <ManagerTable>
+                <Table>
+                    <THead>
+                        <tr>
+                            <TH>Nome</TH>
+                            <THCenter>Ações</THCenter>
+                        </tr>
+                    </THead>
+                    <TBody>
+                        {data.map((item) => (
+                            <TR key={item.id}>
+                                <TD>{item.nome}</TD>
+                                <TDFlex>
+                                    {showModal && (
+                                        <ModalWrapper>
+                                            <ModalContent>
+                                                <H2>Editar</H2>
+                                                <form>
+                                                    <input
+                                                        type="text"
+                                                        name="nomeMensalista"
+                                                        placeholder='Nome'
+                                                        value={nomeMensalista}
+                                                        autocomplete="off"
+                                                        onChange={(e) => setNomeMensalista(e.target.value)} />
+                                                    <button type="submit" onClick={() => handleEdit(item.id, nomeMensalista)}>Alterar</button>
+                                                    <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
+                                                </form>
+                                            </ModalContent>
+                                        </ModalWrapper>
+                                    )}
+                                    <Button
+                                        type='submit'
+                                        backgroundColor="#90EE90"
+                                        onClick={() => setShowModal(true)}
+                                    >
+                                        Editar
+                                    </Button>
+                                    <Button
+                                        type='submit'
+                                        marginLeft="13px"
+                                        backgroundColor="#FF6347"
+                                        onClick={() => handleRemoveSubmit(item.id)}
+                                    >
+                                        Excluir
+                                    </Button>
+                                </TDFlex>
+                            </TR>
+                        ))}
+                    </TBody>
+                </Table>
+            </ManagerTable>
         </div>
     )
 }

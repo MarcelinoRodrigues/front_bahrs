@@ -245,3 +245,14 @@ export const Input = styled.input`
         color: #000;
     }
 `;
+
+export const ManagerTable = styled.div`
+    height: 440px;
+    overflow-x: hidden;
+`;
+
+export const H2 = styled.h2`
+{
+    margin-bottom: 13px!important;
+}
+`;
