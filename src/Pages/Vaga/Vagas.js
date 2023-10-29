@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, H2, ManagerTable, ModalContent, ModalWrapper, Table, TBody, TD, TDConditional, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
 import Nav from "../../components/Nav";
+import Alert from '../../components/Alert';
 
 export default function Vaga(){
     const [data, setData] = useState([]);
@@ -9,14 +10,30 @@ export default function Vaga(){
     const [showModal, setShowModal] = useState(false);
     const [nome, setNome] = useState('');
     const [nomeVaga, setNomeVaga] = useState('');
+    const [vagaOcupada, setVagaOcupada] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             const result = await axios('https://localhost:44311/api/Vagas');
             setData(result.data);
         };
+        if (vagaOcupada) {
+            // Define um temporizador para fechar o Alert após 5 segundos (5000 milissegundos).
+            const timeoutId = setTimeout(() => {
+              handleCloseAlert();
+            }, 1100);
+      
+            // Limpa o temporizador quando o componente é desmontado ou quando vagaOcupada muda para falso.
+            return () => {
+              clearTimeout(timeoutId);
+            };
+        }
         fetchData();
-    }, []);
+    }, [vagaOcupada]);
+    
+    const handleCloseAlert = () => {
+        setVagaOcupada(false);
+    };
 
     const toggleModal = () => {
         setModalOpen(!modalOpen);
@@ -42,7 +59,7 @@ export default function Vaga(){
             const vagaOcupada = result.data.find(e => e.id === id && e.status === 1);
 
             vagaOcupada
-            ? alert("A vaga está ocupada")
+            ? setVagaOcupada(true)
             : await axios.delete(`https://localhost:44311/api/Vagas/${id}`);
 
             const reload = await axios('https://localhost:44311/api/Vagas');
@@ -154,6 +171,9 @@ export default function Vaga(){
                     </TBody>
                 </Table>
             </ManagerTable>
+            <div>
+                {vagaOcupada && <Alert message="A vaga está ocupada"/>}
+            </div>
         </div>
     );
 }
