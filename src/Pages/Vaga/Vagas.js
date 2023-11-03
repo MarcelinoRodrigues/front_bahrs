@@ -11,6 +11,7 @@ export default function Vaga(){
     const [nome, setNome] = useState('');
     const [nomeVaga, setNomeVaga] = useState('');
     const [vagaOcupada, setVagaOcupada] = useState(false);
+    const [exclude, setExclude] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,8 +29,23 @@ export default function Vaga(){
               clearTimeout(timeoutId);
             };
         }
+
+        if (exclude) {
+            const timeoutId = setTimeout(() => {
+                handleCloseExclude();
+            }, 1100);
+      
+            return () => {
+              clearTimeout(timeoutId);
+            };
+        }
+
         fetchData();
-    }, [vagaOcupada]);
+    }, [vagaOcupada,exclude]);
+
+    const handleCloseExclude = () => {
+        setExclude(false);
+    };
     
     const handleCloseAlert = () => {
         setVagaOcupada(false);
@@ -64,7 +80,8 @@ export default function Vaga(){
 
             const reload = await axios('https://localhost:44311/api/Vagas');
                 setData(reload.data);
-                
+
+            setExclude(true);              
         } catch (error) {
             console.error(error);
         }
@@ -173,6 +190,9 @@ export default function Vaga(){
             </ManagerTable>
             <div>
                 {vagaOcupada && <Alert message="A vaga está ocupada"/>}
+            </div>
+            <div>
+                {exclude && <Alert message="Registro Excluiso com Sucesso!"/>}
             </div>
         </div>
     );

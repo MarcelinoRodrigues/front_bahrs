@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, H2, ManagerTable, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
 import Nav from "../../components/Nav";
+import Alert from '../../components/Alert';
 
 export default function Funcionario() {
     const [data, setData] = useState([]);
@@ -9,14 +10,30 @@ export default function Funcionario() {
     const [showModal, setShowModal] = useState(false);
     const [nome, setNome] = useState('');
     const [nomeFuncionario, setNomeFuncionario] = useState('');
+    const [exclude, setExclude] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
             const result = await axios('https://localhost:44311/api/Funcionarios');
             setData(result.data);
         };
+
+        if (exclude) {
+            const timeoutId = setTimeout(() => {
+                handleCloseExclude();
+            }, 1100);
+      
+            return () => {
+              clearTimeout(timeoutId);
+            };
+        }
+
         fetchData();
-    }, []);
+    }, [exclude]);
+
+    const handleCloseExclude = () => {
+        setExclude(false);
+    };
 
     const toggleModal = () => {
         setModalOpen(!modalOpen);
@@ -40,6 +57,7 @@ export default function Funcionario() {
             await axios.delete(`https://localhost:44311/api/Funcionarios/${id}`);
             const result = await axios('https://localhost:44311/api/Funcionarios');
             setData(result.data);
+            setExclude(true);
         } catch (error) {
             console.error(error);
         }
@@ -141,6 +159,9 @@ export default function Funcionario() {
                     </TBody>
                 </Table>
             </ManagerTable>
+            <div>
+                {exclude && <Alert message="Registro Excluiso com Sucesso!"/>}
+            </div>
         </div>
     );
 }
