@@ -93,6 +93,11 @@ export default function Funcionario() {
       }
    };
 
+   const openModalWithItem = (item) => {
+      setNomeFuncionario(item.nome);
+      setShowModal(true);
+   };
+
    return (
       <div className="main">
          <Nav />
@@ -157,7 +162,7 @@ export default function Funcionario() {
                            <Button
                               type='submit'
                               backgroundColor="#90EE90"
-                              onClick={() => setShowModal(true)}
+                              onClick={() => openModalWithItem(item)}
                            >
                               Editar
                            </Button>

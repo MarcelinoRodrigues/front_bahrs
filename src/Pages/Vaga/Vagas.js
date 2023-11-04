@@ -118,6 +118,11 @@ export default function Vaga() {
       }
    };
 
+   const openModalWithItem = (item) => {
+      setNomeVaga(item.nome);
+      setShowModal(true);
+   };
+
    return (
       <div className="main">
          <Nav />
@@ -186,7 +191,7 @@ export default function Vaga() {
                            <Button
                               type='submit'
                               backgroundColor="#90EE90"
-                              onClick={() => setShowModal(true)}
+                              onClick={() => openModalWithItem(item)}
                            >
                               Editar
                            </Button>

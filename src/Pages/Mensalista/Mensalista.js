@@ -45,7 +45,7 @@ export default function Mensalista() {
    const handleCloseExclude = () => {
       setExclude(false);
    };
-   
+
    const handleCloseSuccess = () => {
       setSuccess(false);
    };
@@ -91,6 +91,11 @@ export default function Mensalista() {
       } catch (error) {
          console.error(error);
       }
+   };
+
+   const openModalWithItem = (item) => {
+      setNomeMensalista(item.nome);
+      setShowModal(true);
    };
 
    return (
@@ -157,7 +162,7 @@ export default function Mensalista() {
                            <Button
                               type='submit'
                               backgroundColor="#90EE90"
-                              onClick={() => setShowModal(true)}
+                              onClick={() => openModalWithItem(item)}
                            >
                               Editar
                            </Button>
