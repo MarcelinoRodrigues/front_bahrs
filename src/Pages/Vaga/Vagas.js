@@ -13,6 +13,7 @@ export default function Vaga() {
    const [vagaOcupada, setVagaOcupada] = useState(false);
    const [exclude, setExclude] = useState(false);
    const [success, setSuccess] = useState(false);
+   const [editingItemId, setEditingItemId] = useState(null);
 
    useEffect(() => {
       const fetchData = async () => {
@@ -118,8 +119,9 @@ export default function Vaga() {
       }
    };
 
-   const openModalWithItem = (item) => {
-      setNomeVaga(item.nome);
+   const openModalWithItem = (itemId) => {
+      setEditingItemId(itemId);
+      setNomeVaga(data.find(item => item.id === itemId).nome);
       setShowModal(true);
    };
 
@@ -182,7 +184,7 @@ export default function Vaga() {
                                           value={nomeVaga}
                                           autocomplete="off"
                                           onChange={(e) => setNomeVaga(e.target.value)} />
-                                       <button type="submit" onClick={() => handleEdit(item.id, nomeVaga, item.status)}>Alterar</button>
+                                       <button type="submit" onClick={() => handleEdit(editingItemId, nomeVaga, item.status)}>Alterar</button>
                                        <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
                                     </form>
                                  </ModalContent>
@@ -191,7 +193,7 @@ export default function Vaga() {
                            <Button
                               type='submit'
                               backgroundColor="#90EE90"
-                              onClick={() => openModalWithItem(item)}
+                              onClick={() => openModalWithItem(item.id)}
                            >
                               Editar
                            </Button>

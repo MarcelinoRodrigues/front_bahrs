@@ -12,6 +12,7 @@ export default function Mensalista() {
    const [nomeMensalista, setNomeMensalista] = useState('');
    const [exclude, setExclude] = useState(false);
    const [success, setSuccess] = useState(false);
+   const [editingItemId, setEditingItemId] = useState(null);
 
    useEffect(() => {
       const fetchData = async () => {
@@ -93,10 +94,12 @@ export default function Mensalista() {
       }
    };
 
-   const openModalWithItem = (item) => {
-      setNomeMensalista(item.nome);
+   const openModalWithItem = (itemId) => {
+      setEditingItemId(itemId);
+      setNomeMensalista(data.find(item => item.id === itemId).nome);
       setShowModal(true);
-   };
+    };
+    
 
    return (
       <div className="main">
@@ -153,7 +156,7 @@ export default function Mensalista() {
                                           value={nomeMensalista}
                                           autocomplete="off"
                                           onChange={(e) => setNomeMensalista(e.target.value)} />
-                                       <button type="submit" onClick={() => handleEdit(item.id, nomeMensalista)}>Alterar</button>
+                                       <button type="submit" onClick={() => handleEdit(editingItemId, nomeMensalista)}>Alterar</button>
                                        <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
                                     </form>
                                  </ModalContent>
@@ -162,7 +165,7 @@ export default function Mensalista() {
                            <Button
                               type='submit'
                               backgroundColor="#90EE90"
-                              onClick={() => openModalWithItem(item)}
+                              onClick={() => openModalWithItem(item.id)}
                            >
                               Editar
                            </Button>

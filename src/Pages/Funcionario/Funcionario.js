@@ -12,6 +12,7 @@ export default function Funcionario() {
    const [nomeFuncionario, setNomeFuncionario] = useState('');
    const [exclude, setExclude] = useState(false);
    const [success, setSuccess] = useState(false);
+   const [editingItemId, setEditingItemId] = useState(null);
 
    useEffect(() => {
       const fetchData = async () => {
@@ -93,8 +94,9 @@ export default function Funcionario() {
       }
    };
 
-   const openModalWithItem = (item) => {
-      setNomeFuncionario(item.nome);
+   const openModalWithItem = (itemId) => {
+      setEditingItemId(itemId);
+      setNomeFuncionario(data.find(item => item.id === itemId).nome);
       setShowModal(true);
    };
 
@@ -153,7 +155,7 @@ export default function Funcionario() {
                                           value={nomeFuncionario}
                                           autocomplete="off"
                                           onChange={(e) => setNomeFuncionario(e.target.value)} />
-                                       <button type="submit" onClick={() => handleEdit(item.id, nomeFuncionario)}>Alterar</button>
+                                       <button type="submit" onClick={() => handleEdit(editingItemId, nomeFuncionario)}>Alterar</button>
                                        <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
                                     </form>
                                  </ModalContent>
@@ -162,7 +164,7 @@ export default function Funcionario() {
                            <Button
                               type='submit'
                               backgroundColor="#90EE90"
-                              onClick={() => openModalWithItem(item)}
+                              onClick={() => openModalWithItem(item.id)}
                            >
                               Editar
                            </Button>
