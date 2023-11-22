@@ -13,6 +13,7 @@ export default function Mensalista() {
    const [exclude, setExclude] = useState(false);
    const [success, setSuccess] = useState(false);
    const [editingItemId, setEditingItemId] = useState(null);
+   const [catchName, setCatchName] = useState(false);
 
    useEffect(() => {
       const fetchData = async () => {
@@ -40,8 +41,18 @@ export default function Mensalista() {
          };
       }
 
+      if (catchName) {
+         const timeoutId = setTimeout(() => {
+            handleCloseCatchName();
+         }, 1100);
+
+         return () => {
+            clearTimeout(timeoutId);
+         };
+      }
+
       fetchData();
-   }, [exclude, success]);
+   }, [exclude, success, catchName]);
 
    const handleCloseExclude = () => {
       setExclude(false);
@@ -51,6 +62,10 @@ export default function Mensalista() {
       setSuccess(false);
    };
 
+   const handleCloseCatchName = () => {
+      setCatchName(false);
+   }
+
    const toggleModal = () => {
       setModalOpen(!modalOpen);
    };
@@ -58,6 +73,9 @@ export default function Mensalista() {
    const handleSubmit = async (e) => {
       e.preventDefault();
       try {
+         if (data.some(item => item.nome === nome)) {
+            setCatchName(true);
+         }
          await axios.post('https://localhost:44311/api/Mensalistas', { nome });
          toggleModal();
 
@@ -82,13 +100,19 @@ export default function Mensalista() {
 
    const handleEdit = async (id, nome) => {
       try {
-         await axios.put(`https://localhost:44311/api/Mensalistas/${id}`, {
-            id: id,
-            Nome: nome,
-         });
+         if (data.some(item => item.nome === nome)) {
+            setCatchName(true);
+         }
+         else{
+            await axios.put(`https://localhost:44311/api/Mensalistas/${id}`, {
+               id: id,
+               Nome: nome,
+            });
+         }
 
          const result = await axios('https://localhost:44311/api/Mensalistas');
          setData(result.data);
+         
       } catch (error) {
          console.error(error);
       }
@@ -98,8 +122,8 @@ export default function Mensalista() {
       setEditingItemId(itemId);
       setNomeMensalista(data.find(item => item.id === itemId).nome);
       setShowModal(true);
-    };
-    
+   };
+
 
    return (
       <div className="main">
@@ -188,6 +212,9 @@ export default function Mensalista() {
          </div>
          <div>
             {success && <Alert message="Registro Incluido com Sucesso!" />}
+         </div>
+         <div>
+            {catchName && <Alert message="Esse nome já está cadastrado" />}
          </div>
       </div>
    )
