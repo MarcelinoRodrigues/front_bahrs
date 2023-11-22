@@ -21,12 +21,10 @@ export default function Vaga() {
          setData(result.data);
       };
       if (vagaOcupada) {
-         // Define um temporizador para fechar o Alert após 5 segundos (5000 milissegundos).
          const timeoutId = setTimeout(() => {
             handleCloseAlert();
          }, 1100);
 
-         // Limpa o temporizador quando o componente é desmontado ou quando vagaOcupada muda para falso.
          return () => {
             clearTimeout(timeoutId);
          };
