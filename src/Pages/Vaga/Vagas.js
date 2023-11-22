@@ -14,12 +14,14 @@ export default function Vaga() {
    const [exclude, setExclude] = useState(false);
    const [success, setSuccess] = useState(false);
    const [editingItemId, setEditingItemId] = useState(null);
+   const [catchName, setCatchName] = useState(false);
 
    useEffect(() => {
       const fetchData = async () => {
          const result = await axios('https://localhost:44311/api/Vagas');
          setData(result.data);
       };
+
       if (vagaOcupada) {
          const timeoutId = setTimeout(() => {
             handleCloseAlert();
@@ -50,8 +52,18 @@ export default function Vaga() {
          };
       }
 
+      if (catchName) {
+         const timeoutId = setTimeout(() => {
+            handleCloseCatchName();
+         }, 1800);
+
+         return () => {
+            clearTimeout(timeoutId);
+         };
+      }
+
       fetchData();
-   }, [vagaOcupada, exclude, success]);
+   }, [vagaOcupada, exclude, success, catchName]);
 
    const handleCloseExclude = () => {
       setExclude(false);
@@ -65,6 +77,10 @@ export default function Vaga() {
       setSuccess(false);
    };
 
+   const handleCloseCatchName = () => {
+      setCatchName(false);
+   }
+
    const toggleModal = () => {
       setModalOpen(!modalOpen);
    };
@@ -72,6 +88,9 @@ export default function Vaga() {
    const handleSubmit = async (e) => {
       e.preventDefault();
       try {
+         if (data.some(item => item.nome === nome)) {
+            setCatchName(true);
+         }
          await axios.post('https://localhost:44311/api/Vagas', { nome });
          toggleModal();
 
@@ -104,11 +123,15 @@ export default function Vaga() {
 
    const handleEdit = async (id, nome, status) => {
       try {
-         await axios.put(`https://localhost:44311/api/Vagas/${id}`, {
-            id: id,
-            nome: nome,
-            status: status
-         });
+         if (data.some(item => item.nome === nome)) {
+            setCatchName(true);
+         }else{
+            await axios.put(`https://localhost:44311/api/Vagas/${id}`, {
+               id: id,
+               nome: nome,
+               status: status
+            });
+         }
 
          const result = await axios('https://localhost:44311/api/Vagas');
          setData(result.data);
@@ -217,6 +240,9 @@ export default function Vaga() {
          </div>
          <div>
             {success && <Alert message="Registro Incluido com Sucesso!" />}
+         </div>
+         <div>
+            {catchName && <Alert message="Esse nome já está cadastrado" />}
          </div>
       </div>
    );
