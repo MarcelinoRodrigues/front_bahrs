@@ -69,9 +69,11 @@ export default function NovoEstacionamento() {
         let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
 
         try {
+            const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+
             await axios.post("https://localhost:44311/api/Estacionamento/", {
                 id: 0,
-                Entrada: date,
+                Entrada: formattedDate,
                 Vaga: null,
                 mensalistaId: selectedMensalista !== "" ? selectedMensalista : null,
                 Placa: sendPlaca,
@@ -80,6 +82,7 @@ export default function NovoEstacionamento() {
                 VagaId: selectedVaga,
                 Limpeza: setarLimpeza
             });
+            console.log("Data enviada do front end:", date);
 
             RevolvePath();
 
