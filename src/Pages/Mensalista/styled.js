@@ -16,7 +16,8 @@ export const HeaderCell = styled.div`
   flex: 1;
   font-weight: bold;
   padding: 8px;
-  color: white; /* Adicione esta linha para definir a cor do texto no header */
+  text-align: center;
+  color: #fff;
 `;
 
 export const TableRow = styled.div`
@@ -29,10 +30,12 @@ export const TableRow = styled.div`
 export const TableCell = styled.div`
   flex: 1;
   padding: 8px;
+  text-align: center;
 `;
 
 export const ActionButtons = styled.div`
   display: flex;
+  justify-content: center;
 `;
 
 export const EditButton = styled.button`
