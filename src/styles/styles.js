@@ -4,14 +4,13 @@ import styled from 'styled-components';
 
 //Login
 export const Button = styled.button`
-  background-color: ${props => props.backgroundColor}; 
-  color: ${props => props.color};
+  background-color: #007C7F; 
+  color: #fff;
   padding: 12px 50px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   margin-left: ${props => props.marginLeft}; 
-  margin-bottom: 10px;
   :hover {
     background-color: ${props => props.backgroundColor}; 
   }
