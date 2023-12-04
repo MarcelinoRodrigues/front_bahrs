@@ -129,6 +129,7 @@ export default function Funcionario() {
          {/* Modal de Inclusão */}
          <Modal isOpen={isAddModalOpen}>
             <ModalContent>
+               <h2>Novo Registro</h2>
                <EditForm
                   onSubmit={(e) => {
                      e.preventDefault();

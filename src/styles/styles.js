@@ -174,6 +174,8 @@ export const TDConditional = styled.td`
   text-align: center;
   background-color: ${props => (props.status === 0 ? '#90EE90' : '#FF6347')};
   width: 100px;
+  border-radius: 7px;
+  color: #000;
 `;
 
 //Modal
@@ -251,8 +253,8 @@ export const ActionButtons = styled.div`
 `;
 
 export const EditButton = styled.button`
-  background-color: #4caf50;
-  color: white;
+  background-color: #90EE90;
+  color: #000;
   border: none;
   padding: 8px 15px;
   text-align: center;
@@ -265,8 +267,8 @@ export const EditButton = styled.button`
 `;
 
 export const DeleteButton = styled.button`
-  background-color: #f44336;
-  color: white;
+  background-color: #FF6347;
+  color: #000;
   border: none;
   padding: 8px 15px;
   text-align: center;
