@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { StyledTable, TableHeader, HeaderCell, TableRow, TableCell, ActionButtons, EditButton, DeleteButton, Modal, ModalContent, CloseButton, EditForm } from './styled'; // Certifique-se de importar os componentes do seu arquivo styled
+import { StyledTable,Button, TableHeader, HeaderCell, TableRow, TableCell, ActionButtons, EditButton, DeleteButton, Modal, ModalContent, CloseButton, EditForm } from '../../styles/styles'; // Certifique-se de importar os componentes do seu arquivo styled
 import Alert from '../../components/Alert';
 import Nav from '../../components/Nav';
-import { Button } from '../../styles/styles';
 
 export default function Mensalista() {
    const [data, setData] = useState([]);
