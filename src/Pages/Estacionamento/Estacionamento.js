@@ -1,22 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, ButtonNav, H5, Input, ManagerTable, ModalContent, ModalWrapper, Table, TBody, TD, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
+import { Button, CloseButton, DeleteButton, EditButton, EditForm, ExitButton, HeaderCell, Input, Modal, ModalContent, NotaButton, StyledTable, TableCell, TableHeader, TableRow, TDFlex, THCenter } from '../../styles/styles';
 import Nav from "../../components/Nav";
 import { Limpeza } from '../../services/Traducoes';
 import moment from 'moment';
 import Alert from '../../components/Alert';
+import { IMG, Label, Option, Select } from './styles';
+import RequiredIcon from '../../Assets/iconspontodeexclamacao.png';
 
 export default function Estacionamento() {
    const [data, setData] = useState([]);
-   const [showModal, setShowModal] = useState(false);
    const [mensalistas, setMensalistas] = useState([]);
    const [funcionarios, setFuncionarios] = useState([]);
    const [vagas, setVagas] = useState([]);
    const [verificaSaida, setVerificaSaida] = useState(false);
    const [exclude, setExclude] = useState(false);
    const [successSaida, setSuccessSaida] = useState(false);
+   const [isModalOpen, setModalOpen] = useState(false);
+   const [isAddModalOpen, setAddModalOpen] = useState(false);
+   const [itemToEdit, setItemToEdit] = useState('');
+
+   const [sendPlaca, setSendPlaca] = useState('');
+   const [sendLimpeza, setSendLimpeza] = useState('');
+   const [selectedVaga, setSelectedVaga] = useState('');
+   const [selectedMensalista, setSelectedMensalista] = useState('');
+   const [selectedFuncionario, setSelectedFuncionario] = useState('');
+   const [vaga, setVaga] = useState([]);
+   const date = new Date();
 
    useEffect(() => {
+      const fetchVagas = async () => {
+         const response = await fetch('https://localhost:44311/api/Vagas/Status');
+         const data = await response.json();
+         setVaga(data);
+      };
+
       const fetchData = async () => {
          const result = await axios('https://localhost:44311/api/Estacionamento');
          setData(result.data);
@@ -34,51 +52,73 @@ export default function Estacionamento() {
          setVagas(result.data);
       };
 
-      if (verificaSaida) {
-         const timeoutId = setTimeout(() => {
-            handleCloseSaida();
-         }, 1800);
+      exclude && setTimeout(handleCloseExclude, 1100);
+      successSaida && setTimeout(closeSaida, 1100);
+      verificaSaida && setTimeout(handleCloseSaida, 1800);
 
-         return () => {
-            clearTimeout(timeoutId);
-         };
-      }
-
-      if (exclude) {
-         const timeoutId = setTimeout(() => {
-            handleCloseExclude();
-         }, 1100);
-
-         return () => {
-            clearTimeout(timeoutId);
-         };
-      }
-      if (successSaida) {
-         const timeoutId = setTimeout(() => {
-            closeSaida();
-         }, 1000);
-
-         return () => {
-            clearTimeout(timeoutId);
-         };
-      }
-
+      fetchVagas();
       fetchData();
       fetchMensalistas();
       fetchFuncionario();
       fetchVaga();
    }, [verificaSaida, exclude, successSaida]);
 
-   const handleCloseSaida = () => {
-      setVerificaSaida(false);
-   };
+   const handleCloseSaida = () => setVerificaSaida(false);
+   const handleCloseExclude = () => setExclude(false);
+   const closeSaida = () => setSuccessSaida(false);
 
-   const handleCloseExclude = () => {
-      setExclude(false);
-   };
+   const TratarDadosLimpeza = (recebeSendLimpeza) => {
+      let resultado = 0;
+      //TODO: qualquer alteração de enum Limpeza altera o valor do tratamento
+      switch (recebeSendLimpeza) {
+         case "Completa":
+            resultado = 1;
+            break;
+         case "Interna":
+            resultado = 2;
+            break;
+         case "Externa":
+            resultado = 3;
+            break;
+         default:
+            resultado = 0;
+            break;
+      }
+      return resultado;
+   }
 
-   const closeSaida = () => {
-      setSuccessSaida(false);
+   const options = Object.keys(Limpeza).map((key) => (
+      <Option key={key} value={Limpeza[key]}>
+         {Limpeza[key]}
+      </Option>
+   ));
+
+   const HandleSubmit = async (e) => {
+      e.preventDefault();
+      let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
+
+      try {
+         const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+
+         await axios.post("https://localhost:44311/api/Estacionamento/", {
+            id: 0,
+            Entrada: formattedDate,
+            Vaga: null,
+            mensalistaId: selectedMensalista !== "" ? selectedMensalista : null,
+            Placa: sendPlaca,
+            valor: null,
+            FuncionarioId: selectedFuncionario,
+            VagaId: selectedVaga,
+            Limpeza: setarLimpeza
+         });
+
+         const result = await axios('https://localhost:44311/api/Estacionamento');
+         setData(result.data);
+         setAddModalOpen(false);
+
+      } catch (error) {
+         console.log(error);
+      }
    };
 
    const handleRemove = async (id) => {
@@ -98,228 +138,223 @@ export default function Estacionamento() {
       }
    };
 
-   const handleEdit = async (id, nome, status) => {
-      try {
-         await axios.put(`https://localhost:44311/api/Vagas/${id}`, {
-            id: id,
-            Nome: nome,
-            Status: status
-         });
-
-         const result = await axios('https://localhost:44311/api/Vagas');
-         setData(result.data);
-      } catch (error) {
-         console.error(error);
-      }
+   const formatDate = (date) => {
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
+      return date.toLocaleString('en-US', options).replace(/(\d+)\/(\d+)\/(\d+), /, '$3-$1-$2 ');
    };
 
    return (
       <div className="main">
          <Nav />
-         <ButtonNav
-            type='submit'
-            backgroundColor="#90EE90"
-            color='black'
-            to="/novoestacionamento"
-         >
-            Adicionar +
-         </ButtonNav>
-         <ManagerTable>
-            <Table>
-               <THead>
-                  <tr>
-                     <TH>Entrada</TH>
-                     <TH>Saída</TH>
-                     <TH>Mensalista</TH>
-                     <TH>Placa</TH>
-                     <TH>Funcionario</TH>
-                     <TH>Valor</TH>
-                     <TH>Vaga</TH>
-                     <TH>Limpeza</TH>
-                     <THCenter>Ações</THCenter>
-                  </tr>
-               </THead>
-               <TBody>
-                  {data.map((item) => {
-                     const getMensalista = mensalistas.find(m => m.id === item.mensalistaId);
-                     const nomeMensalista = getMensalista ? getMensalista.nome : '';
+         <Button type="default" onClick={() => { setAddModalOpen(true); }}>Novo Registro</Button>
+         <StyledTable>
+            <TableHeader>
+               <HeaderCell>Entrada</HeaderCell>
+               <HeaderCell>Saída</HeaderCell>
+               <HeaderCell>Mensalista</HeaderCell>
+               <HeaderCell>Placa</HeaderCell>
+               <HeaderCell>Funcionario</HeaderCell>
+               <HeaderCell>Valor</HeaderCell>
+               <HeaderCell>Vaga</HeaderCell>
+               <HeaderCell>Limpeza</HeaderCell>
+               <THCenter>Ações</THCenter>
+            </TableHeader>
+            {data.map((item) => {
+               const getMensalista = mensalistas.find(m => m.id === item.mensalistaId);
+               const nomeMensalista = getMensalista ? getMensalista.nome : '';
+               const getFuncionario = funcionarios.find(f => f.id === item.funcionarioId);
+               const nomeFuncionario = getFuncionario ? getFuncionario.nome : '';
+               const getVaga = vagas.find(v => v.id === item.vagaId);
+               const nomeVaga = getVaga ? getVaga.nome : '';
 
-                     const getFuncionario = funcionarios.find(f => f.id === item.funcionarioId);
-                     const nomeFuncionario = getFuncionario ? getFuncionario.nome : '';
+               const ExecuteExit = async (id) => {
+                  try {
+                     await axios.put(`https://localhost:44311/api/Estacionamento/Saida`, {
+                        id: id,
+                        entrada: item.entrada,
+                        vencimento: null,
+                        mensalistaId: item.mensalistaId,
+                        placa: item.placa,
+                        valor: null,
+                        funcionarioId: item.funcionarioId,
+                        vagaId: item.vagaId,
+                        limpeza: item.limpeza
+                     });
 
-                     const getVaga = vagas.find(v => v.id === item.vagaId);
-                     const nomeVaga = getVaga ? getVaga.nome : '';
+                     const result = await axios('https://localhost:44311/api/Estacionamento');
+                     setData(result.data);
+                     setSuccessSaida(true);
+                  } catch (error) {
+                     console.error(error);
+                  }
+               }
 
-                     const ExecuteExit = async (id) => {
-                        try {
-                           await axios.put(`https://localhost:44311/api/Estacionamento/Saida`, {
-                              id: id,
-                              entrada: item.entrada,
-                              vencimento: null,
-                              mensalistaId: item.mensalistaId,
-                              placa: item.placa,
-                              valor: null,
-                              funcionarioId: item.funcionarioId,
-                              vagaId: item.vagaId,
-                              limpeza: item.limpeza
-                           });
+               const ExecuteEdit = (item) => {
+                  setModalOpen(true);
+                  setItemToEdit(
+                     {
+                        id: item.id,
+                        placa: item.placa,
+                        vagaId: item.vagaId,
+                        mensalistaId: item.mensalistaId,
+                        limpeza: item.limpeza,
+                        funcionarioId: item.funcionarioId,
+                        entrada: item.entrada
+                     });
+               }
 
-                           const result = await axios('https://localhost:44311/api/Estacionamento');
-                           setData(result.data);
-                           setSuccessSaida(true);
-                        } catch (error) {
-                           console.error(error);
-                        }
+               const handleEdit = async (item) => {
+                  try {
+                     await axios.put(`https://localhost:44311/api/Estacionamento/`, {
+                        id: item.id,
+                        entrada: item.entrada,
+                        vencimento: null,
+                        mensalistaId: item.mensalistaId,
+                        placa: item.placa,
+                        valor: null,
+                        funcionarioId: item.funcionarioId,
+                        vagaId: item.vagaId,
+                        limpeza: item.limpeza
+                     });
+
+                     const result = await axios('https://localhost:44311/api/Estacionamento');
+                     setData(result.data);
+                  } catch (error) {
+                     console.error(error);
+                  }
+               };
+
+               return (
+                  <TableRow key={item.id}>
+                     <TableCell>{moment(item.entrada).format('DD-MM-YYYY HH:mm')}</TableCell>
+                     <TableCell>{item.vencimento === null ? '' : moment(item.vencimento).format('DD-MM-YYYY HH:mm')}</TableCell>
+                     <TableCell>{nomeMensalista}</TableCell>
+                     <TableCell>{item.placa}</TableCell>
+                     <TableCell>{nomeFuncionario}</TableCell>
+                     <TableCell>{item.valor === null ? '' : item.valor + '$'}</TableCell>
+                     <TableCell>{nomeVaga}</TableCell>
+                     <TableCell>{Limpeza[item.limpeza]}</TableCell>
+                     <TDFlex>
+                        {/* Modal de Edição */}
+                        {(<Modal isOpen={isModalOpen}>
+                           <ModalContent>
+                              <h2>Editar</h2>
+                              <EditForm>
+                                 <h2>Placa:</h2>
+                                 <input
+                                    type="text"
+                                    autoComplete="off"
+                                    value={itemToEdit.placa}
+                                    onChange={(event) => setItemToEdit({ ...itemToEdit, placa: event.target.value })}
+                                 />
+                                 <Label><h2>Funcionario:</h2>
+                                    <Select value={itemToEdit.funcionarioId} required
+                                       onChange={(event) => setItemToEdit({ ...itemToEdit, funcionarioId: event.target.value })}
+                                    >
+                                       <Option value="">Selecione uma opção</Option>
+                                       {funcionarios.map((funcionarios) => (
+                                          <Option key={funcionarios.id}
+                                             value={funcionarios.id}
+                                          >{funcionarios.nome}
+                                          </Option>
+                                       ))}
+                                    </Select>
+                                 </Label>
+                                 <Label><h2>Limpeza:</h2>
+                                    <Select value={itemToEdit.limpeza}
+                                       onChange={(event) => setItemToEdit({ ...itemToEdit, limpeza: event.target.value })}>
+                                       {options}
+                                    </Select>
+                                 </Label>
+                                 <button type="submit" onClick={() => handleEdit(item)}>Alterar</button>
+                                 <CloseButton onClick={() => setModalOpen(false)}>Fechar</CloseButton>
+                              </EditForm>
+                           </ModalContent>
+                        </Modal>)}
+                        <NotaButton> Gerar Nota</NotaButton>
+                        <ExitButton onClick={() => ExecuteExit(item.id)}> Saída</ExitButton>
+                        <EditButton onClick={() => ExecuteEdit(item)}> Editar </EditButton>
+                        <DeleteButton onClick={() => handleRemove(item.id)}>Remover</DeleteButton>
+                     </TDFlex>
+                  </TableRow>
+               );
+            })}
+         </StyledTable>
+         {/* Modal de inclusão */}
+         <Modal isOpen={isAddModalOpen}>
+            <ModalContent>
+               <h2>Novo Registro</h2>
+               <EditForm
+                  onSubmit={(e) => {
+                     e.preventDefault();
+                     if (e.nativeEvent.submitter.name === 'submitBtn') {
+                        HandleSubmit(e);
+                     } else {
+                        setAddModalOpen(false);
                      }
-                     return (
-                        <TR key={item.id}>
-                           <TD>{moment(item.entrada).format('DD-MM-YYYY HH:mm')}</TD>
-                           <TD>{item.vencimento === null ? '' : moment(item.vencimento).format('DD-MM-YYYY HH:mm')}</TD>
-                           <TD>{nomeMensalista}</TD>
-                           <TD>{item.placa}</TD>
-                           <TD>{nomeFuncionario}</TD>
-                           <TD>{item.valor === null ? '' : item.valor + '$'}</TD>
-                           <TD>{nomeVaga}</TD>
-                           <TD>{Limpeza[item.limpeza]}</TD>
-                           <TDFlex>
-                              {showModal && (
-                                 <ModalWrapper>
-                                    <ModalContent>
-                                       <h2>Editar</h2>
-                                       <form>
-                                          <H5>
-                                             Entrada:
-                                          </H5>
-                                          <Input
-                                             type="text"
-                                             name="Entrada"
-                                             autoComplete='off'
-                                             placeholder={moment(item.entrada).format('DD-MM-YYYY HH:mm')}
-                                             disabled
-                                          />
-                                          <H5>
-                                             Saída:
-                                          </H5>
-                                          <Input
-                                             type="text"
-                                             name="Entrada"
-                                             autoComplete='off'
-                                             placeholder={moment(item.vencimento).format('DD-MM-YYYY HH:mm')}
-                                             disabled
-                                          />
-                                          <H5>
-                                             Valor:
-                                          </H5>
-                                          <Input
-                                             type="text"
-                                             name="Entrada"
-                                             autoComplete='off'
-                                             placeholder={item.valor}
-                                             disabled
-                                          />
-                                          <H5>
-                                             Mensalista:
-                                          </H5>
-                                          <Input
-                                             type="text"
-                                             name="Entrada"
-                                             autoComplete='off'
-                                             placeholder={nomeMensalista}
-                                             disabled
-                                          />
-                                          <H5>
-                                             Placa:
-                                          </H5>
-                                          <Input
-                                             type="text"
-                                             name="Entrada"
-                                             autoComplete='off'
-                                             placeholder={item.placa}
-                                          />
-                                          <H5>
-                                             Funcionario:
-                                          </H5>
-                                          <Input
-                                             type="text"
-                                             name="Entrada"
-                                             autoComplete='off'
-                                             placeholder={nomeFuncionario}
-                                             disabled
-                                          />
-                                          <H5>
-                                             Vagas:
-                                          </H5>
-                                          <Input
-                                             type="text"
-                                             name="Entrada"
-                                             autoComplete='off'
-                                             placeholder={nomeVaga}
-                                             disabled
-                                          />
-                                          <H5>
-                                             Limpeza:
-                                          </H5>
-                                          <Input
-                                             type="text"
-                                             name="Entrada"
-                                             autoComplete='off'
-                                             placeholder={Limpeza[item.limpeza]}
-                                             disabled
-                                          />
-                                          <button type="submit" onClick={() => handleEdit(item.id, nomeVaga, item.status)}>Alterar</button>
-                                          <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
-                                       </form>
-                                    </ModalContent>
-                                 </ModalWrapper>
-                              )}
-                              <Button
-                                 type='submit'
-                                 backgroundColor="#5bc0de"
-                                 color='white'
-                              >
-                                 Gerar Nota
-                              </Button>
-                              <Button
-                                 type='submit'
-                                 backgroundColor="#191970"
-                                 color='white'
-                                 marginLeft="13px"
-                                 onClick={() => ExecuteExit(item.id)}
-                              >
-                                 Saída
-                              </Button>
-                              <Button
-                                 type='submit'
-                                 backgroundColor="#90EE90"
-                                 marginLeft="13px"
-                                 onClick={() => setShowModal(true)}
-                              >
-                                 Editar
-                              </Button>
-                              <Button
-                                 type='submit'
-                                 backgroundColor="#FF6347"
-                                 marginLeft="13px"
-                                 onClick={() => handleRemove(item.id)}
-                              >
-                                 Remover
-                              </Button>
-                           </TDFlex>
-                        </TR>
-                     );
-                  })}
-               </TBody>
-            </Table>
-         </ManagerTable>
-         <div>
-            {verificaSaida && <Alert message="O estacionamento não pode ser removido sem marcar saída antes" />}
-         </div>
-         <div>
-            {exclude && <Alert message="Registro Excluiso com Sucesso!" />}
-         </div>
-         <div>
-            {successSaida && <Alert message="Saída Confirmada!" />}
-         </div>
+                  }}>
+                  <Label>Entrada:
+                     <input
+                        type="text"
+                        value={formatDate(date)}
+                        readOnly
+                        disabled={true}
+                        onChange={() => { }}
+                     />
+                  </Label>
+                  <Label>Mensalista:
+                     <Select value={selectedMensalista} onChange={(event) => setSelectedMensalista(event.target.value)}>
+                        <Option value="">Selecione uma opção</Option>
+                        {mensalistas.map((mensalista) => (
+                           <Option key={mensalista.id}
+                              value={mensalista.id}>
+                              {mensalista.nome}
+                           </Option>
+                        ))}
+                     </Select>
+                  </Label>
+                  <Label><span>Placa:</span> <IMG src={RequiredIcon}></IMG>
+                     <Input type="text"
+                        value={sendPlaca}
+                        onChange={(event) => setSendPlaca(event.target.value)}
+                        required />
+                  </Label>
+                  <Label><span>Funcionario: </span><IMG src={RequiredIcon}></IMG>
+                     <Select value={selectedFuncionario} onChange={(event) => setSelectedFuncionario(event.target.value)} required>
+                        <Option value="">Selecione uma opção</Option>
+                        {funcionarios.map((funcionarios) => (
+                           <Option key={funcionarios.id}
+                              value={funcionarios.id}
+                              onChange={(event) => setFuncionarios(event.target.value)}>
+                              {funcionarios.nome}
+                           </Option>
+                        ))}
+                     </Select>
+                  </Label>
+                  <Label><span>Vaga: </span><IMG src={RequiredIcon}></IMG>
+                     <Select value={selectedVaga} onChange={(event) => setSelectedVaga(event.target.value)} required>
+                        <Option value="">Selecione uma opção</Option>
+                        {vaga.map((vagas) => (
+                           <Option key={vagas.id}
+                              value={vagas.id}>
+                              {vagas.nome}
+                           </Option>
+                        ))}
+                     </Select>
+                  </Label>
+                  <Label>Limpeza:
+                     <Select value={sendLimpeza} onChange={(event) => setSendLimpeza(event.target.value)}>
+                        {options}
+                     </Select>
+                  </Label>
+                  <button type="submit" name="submitBtn">Adicionar</button>
+                  <CloseButton onClick={() => setAddModalOpen(false)}>Fechar</CloseButton>
+               </EditForm>
+            </ModalContent>
+         </Modal>
+         <div>{verificaSaida && <Alert message="O estacionamento não pode ser removido sem marcar saída antes" />}</div>
+         <div>{exclude && <Alert message="Registro Excluiso com Sucesso!" />}</div>
+         <div>{successSaida && <Alert message="Saída Confirmada!" />}</div>
       </div>
    );
 }

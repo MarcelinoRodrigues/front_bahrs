@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, H2, ManagerTable, ModalContent, ModalWrapper, Table, TBody, TD, TDConditional, TDFlex, TH, THCenter, THead, TR } from '../../styles/styles';
+import { Button, CloseButton, DeleteButton, EditButton, EditForm, HeaderCell, Modal, ModalContent, StyledTable, TableCell, TableHeader, TableRow, TDConditional} from '../../styles/styles';
 import Nav from "../../components/Nav";
 import Alert from '../../components/Alert';
 
 export default function Vaga() {
    const [data, setData] = useState([]);
-   const [modalOpen, setModalOpen] = useState(false);
-   const [showModal, setShowModal] = useState(false);
    const [nome, setNome] = useState('');
    const [nomeVaga, setNomeVaga] = useState('');
    const [vagaOcupada, setVagaOcupada] = useState(false);
@@ -15,6 +13,8 @@ export default function Vaga() {
    const [success, setSuccess] = useState(false);
    const [editingItemId, setEditingItemId] = useState(null);
    const [catchName, setCatchName] = useState(false);
+   const [isAddModalOpen, setAddModalOpen] = useState(false);
+   const [isModalOpen, setModalOpen] = useState(false);
 
    useEffect(() => {
       const fetchData = async () => {
@@ -22,68 +22,18 @@ export default function Vaga() {
          setData(result.data);
       };
 
-      if (vagaOcupada) {
-         const timeoutId = setTimeout(() => {
-            handleCloseAlert();
-         }, 1100);
-
-         return () => {
-            clearTimeout(timeoutId);
-         };
-      }
-
-      if (exclude) {
-         const timeoutId = setTimeout(() => {
-            handleCloseExclude();
-         }, 1100);
-
-         return () => {
-            clearTimeout(timeoutId);
-         };
-      }
-
-      if (success) {
-         const timeoutId = setTimeout(() => {
-            handleCloseSuccess();
-         }, 1100);
-
-         return () => {
-            clearTimeout(timeoutId);
-         };
-      }
-
-      if (catchName) {
-         const timeoutId = setTimeout(() => {
-            handleCloseCatchName();
-         }, 1800);
-
-         return () => {
-            clearTimeout(timeoutId);
-         };
-      }
+      vagaOcupada && setTimeout(handleCloseAlert, 1100);
+      exclude && setTimeout(handleCloseExclude, 1100);
+      success && setTimeout(handleCloseSuccess, 1100);
+      catchName && setTimeout(handleCloseCatchName, 1100);
 
       fetchData();
    }, [vagaOcupada, exclude, success, catchName]);
 
-   const handleCloseExclude = () => {
-      setExclude(false);
-   };
-
-   const handleCloseAlert = () => {
-      setVagaOcupada(false);
-   };
-
-   const handleCloseSuccess = () => {
-      setSuccess(false);
-   };
-
-   const handleCloseCatchName = () => {
-      setCatchName(false);
-   }
-
-   const toggleModal = () => {
-      setModalOpen(!modalOpen);
-   };
+   const handleCloseExclude = () => setExclude(false);
+   const handleCloseAlert = () => setVagaOcupada(false);
+   const handleCloseSuccess = () => setSuccess(false);
+   const handleCloseCatchName = () => setCatchName(false);
 
    const handleSubmit = async (e) => {
       e.preventDefault();
@@ -92,7 +42,7 @@ export default function Vaga() {
             setCatchName(true);
          }
          await axios.post('https://localhost:44311/api/Vagas', { nome });
-         toggleModal();
+         setAddModalOpen(false);
 
          const result = await axios('https://localhost:44311/api/Vagas');
          setData(result.data);
@@ -114,7 +64,6 @@ export default function Vaga() {
 
          const reload = await axios('https://localhost:44311/api/Vagas');
          setData(reload.data);
-
          setExclude(true);
       } catch (error) {
          console.error(error);
@@ -143,24 +92,27 @@ export default function Vaga() {
    const openModalWithItem = (itemId) => {
       setEditingItemId(itemId);
       setNomeVaga(data.find(item => item.id === itemId).nome);
-      setShowModal(true);
+      setModalOpen(true);
    };
 
    return (
       <div className="main">
          <Nav />
-         <Button
-            type='submit'
-            backgroundColor="#90EE90"
-            onClick={toggleModal}
-         >
-            Adicionar +
-         </Button>
-         {modalOpen && (
-            <ModalWrapper>
+         <Button type="default" onClick={() => { setNome(''); setAddModalOpen(true); }}>Novo Registro</Button>
+         { (
+            <Modal isOpen={isAddModalOpen}>
                <ModalContent>
-                  <H2>Novo Registro</H2>
-                  <form onSubmit={handleSubmit}>
+                  <h2>Novo Registro</h2>
+                  <EditForm
+                  onSubmit={(e) => {
+                     e.preventDefault();
+                     if (e.nativeEvent.submitter.name === 'submitBtn') {
+                        handleSubmit(e);
+                     } else {
+                        setAddModalOpen(false);
+                        setNome('');
+                     }
+                  }}>
                      <input
                         type="text"
                         name="nome"
@@ -168,36 +120,30 @@ export default function Vaga() {
                         value={nome}
                         autocomplete="off"
                         onChange={(e) => setNome(e.target.value)} />
-                     <button type="submit">Incluir</button>
-                     <button type="button" onClick={toggleModal}>
-                        Fechar
-                     </button>
-                  </form>
+                     <button type="submit" name="submitBtn">Adicionar</button>
+                     <CloseButton onClick={() => setAddModalOpen(false)}>Fechar</CloseButton>
+                  </EditForm>
                </ModalContent>
-            </ModalWrapper>
+            </Modal>
          )}
-         <ManagerTable>
-            <Table>
-               <THead>
-                  <tr>
-                     <TH>Nome</TH>
-                     <TH>Status</TH>
-                     <THCenter>Ações</THCenter>
-                  </tr>
-               </THead>
-               <TBody>
+            <StyledTable>
+               <TableHeader>
+                     <HeaderCell>Nome</HeaderCell>
+                     <HeaderCell>Status</HeaderCell>
+                     <HeaderCell>Ações</HeaderCell>
+               </TableHeader>
                   {data.map((item) => (
-                     <TR key={item.id}>
-                        <TD>{item.nome}</TD>
+                     <TableRow key={item.id}>
+                        <TableCell>{item.nome}</TableCell>
                         <TDConditional status={item.status}>
                            {item.status === 0 ? 'Ativo' : 'Ocupado'}
                         </TDConditional>
-                        <TDFlex>
-                           {showModal && (
-                              <ModalWrapper>
+                        <TableCell>
+                           { (
+                              <Modal isOpen={isModalOpen}>
                                  <ModalContent>
-                                    <H2>Editar</H2>
-                                    <form>
+                                    <h2>Editar</h2>
+                                    <EditForm>
                                        <input
                                           type="text"
                                           name="nomeVaga"
@@ -206,32 +152,25 @@ export default function Vaga() {
                                           autocomplete="off"
                                           onChange={(e) => setNomeVaga(e.target.value)} />
                                        <button type="submit" onClick={() => handleEdit(editingItemId, nomeVaga, item.status)}>Alterar</button>
-                                       <button type="button" onClick={() => setShowModal(false)}>Fechar</button>
-                                    </form>
+                                       <CloseButton onClick={() => setModalOpen(false)}>Fechar</CloseButton>
+                                    </EditForm>
                                  </ModalContent>
-                              </ModalWrapper>
+                              </Modal>
                            )}
-                           <Button
-                              type='submit'
-                              backgroundColor="#90EE90"
+                           <EditButton
                               onClick={() => openModalWithItem(item.id)}
                            >
                               Editar
-                           </Button>
-                           <Button
-                              type='submit'
-                              backgroundColor="#FF6347"
-                              marginLeft="13px"
+                           </EditButton>
+                           <DeleteButton
                               onClick={() => handleRemove(item.id)}
                            >
                               Excluir
-                           </Button>
-                        </TDFlex>
-                     </TR>
+                           </DeleteButton>
+                        </TableCell>
+                     </TableRow>
                   ))}
-               </TBody>
-            </Table>
-         </ManagerTable>
+            </StyledTable>
          <div>
             {vagaOcupada && <Alert message="A vaga está ocupada" />}
          </div>

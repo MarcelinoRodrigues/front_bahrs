@@ -5,6 +5,8 @@ export const FilterContainer = styled.div`
     align-items: center;
     gap: 10px;
     padding: 1em;
+    border-radius: 5px;
+    background-color: #007C7F;
 `;
 
 export const Dropdown = styled.select`
@@ -51,16 +53,9 @@ export const Button = styled.button`
     font-size: 15px;
     border: none;
     border-radius: 4px;
-    background-color: #00b300;
-    color: #fff;
     cursor: pointer;
 
     &:hover {
-    background-color: #008c00;
-    }
-
-    &:focus {
-    outline: none;
-    box-shadow: 0 0 4px rgba(0, 179, 0, 0.4);
+    background-color: #e3e3e3;
     }
 `;
