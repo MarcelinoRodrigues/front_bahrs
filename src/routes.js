@@ -12,7 +12,6 @@ import Funcionario from './Pages/Funcionario/Funcionario';
 import Estacionamento from './Pages/Estacionamento/Estacionamento';
 
 import NovoUsuario from './Pages/NovoUsuario/NovoUsuario';
-import NovoEstacionamento from './Pages/Estacionamento/NovoEstacionamento/NovoEstacionamento';
 import Dashboard from './Pages/Dashboard/Dashboard';
 
 export default function Routes_App() {
@@ -27,7 +26,6 @@ export default function Routes_App() {
                 <Route path='/vagas' element={<Vagas/>}/>
                 <Route path='/funcionario' element={<Funcionario/>}/>
                 <Route path='/estacionamento' element={<Estacionamento/>}/>
-                <Route path='/novoestacionamento' element={<NovoEstacionamento/>}/>
                 <Route path='/novoUsuario' element={<NovoUsuario/>} />
             </Routes>
         </Router>

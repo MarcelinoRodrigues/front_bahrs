@@ -140,6 +140,8 @@ export const TH = styled.th`
 `;
 
 export const THCenter = styled.th`
+  font-weight: bold;
+  color: #fff;
   padding: 8px;
   text-align: left;
   border-bottom: 1px solid #ddd;
@@ -197,6 +199,7 @@ export const H5 = styled.h5`
 `;
 
 export const Input = styled.input`
+   width:92%;
     &::placeholder {
         color: #000;
     }
@@ -277,6 +280,34 @@ export const DeleteButton = styled.button`
   font-size: 14px;
   cursor: pointer;
   border-radius: 4px;
+`;
+
+export const ExitButton = styled.button`
+  background-color: #007C7F;
+  color: #000;
+  border: none;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 12px;
+`;
+
+export const NotaButton = styled.button`
+  background-color: #5bc0de;
+  color: #000;
+  border: none;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 12px;
 `;
 
 // Novos componentes adicionados
