@@ -12,7 +12,7 @@ export const Button = styled.button`
   cursor: pointer;
   margin-left: ${props => props.marginLeft}; 
   :hover {
-    background-color: ${props => props.backgroundColor}; 
+    color: ${props => props.hovercolor}; 
   }
 `;
 
@@ -144,9 +144,8 @@ export const THCenter = styled.th`
   color: #fff;
   padding: 8px;
   text-align: left;
-  border-bottom: 1px solid #ddd;
   text-align: center;
-  width: 40%;
+  width: 25%;
 `;
 
 export const TBody = styled.tbody`
