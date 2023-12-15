@@ -63,7 +63,7 @@ export default function Configuracoes() {
                             <TableCell>{item.limpezaExterna === null ? '' : item.limpezaExterna + '$'}</TableCell>
                             <TableCell>{item.limpezaInterna === null ? '' : item.limpezaExterna + '$'}</TableCell>
                             <TableCell>
-                                { (
+                                {(
                                     <Modal isOpen={isModalOpen}>
                                         <ModalContent style={{padding: '90px'}}>
                                             <h2>Editar</h2>
@@ -75,14 +75,12 @@ export default function Configuracoes() {
                                                    } else {
                                                       setModalOpen(false);
                                                    }
-                                                }}
-                                            >
+                                                }}>
                                                 <label>Diaria</label>
                                                 <input
                                                     type="text"
                                                     name="diaria"
-                                                    placeholder={item.diaria}
-                                                    value={editdiaria}
+                                                    value={item.diaria}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditDiaria(e.target.value)} />
                                                 <label>Valor Por hora</label>
@@ -90,40 +88,35 @@ export default function Configuracoes() {
                                                     type="text"
                                                     name="hora"
                                                     required
-                                                    placeholder={item.hora}
-                                                    value={edithora}
+                                                    value={item.hora}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditHora(e.target.value)} />
                                                 <label>Valor mensal</label>
                                                 <input
                                                     type="text"
                                                     name="mensal"
-                                                    placeholder={item.mensal}
-                                                    value={editmensal}
+                                                    value={item.mensal}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditMensal(e.target.value)} />
                                                 <label>Limpeza completa</label>
                                                 <input
                                                     type="text"
                                                     name="limpezaCompleta"
-                                                    placeholder={item.limpezaCompleta}
-                                                    value={editlimpezaCompleta}
+                                                    value={item.limpezaCompleta}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditLimpezaCompleta(e.target.value)} />
                                                 <label>Limpeza externa</label>
                                                 <input
                                                     type="text"
                                                     name="limpezaExterna"
-                                                    placeholder={item.limpezaExterna}
-                                                    value={editlimpezaExterna}
+                                                    value={item.limpezaExterna}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditLimpezaExterna(e.target.value)} />
                                                 <label>Limpeza interna</label>
                                                 <input
                                                     type="text"
                                                     name="limpezaInterna"
-                                                    placeholder={item.limpezaInterna}
-                                                    value={editlimpezaInterna}
+                                                    value={item.limpezaInterna}
                                                     autocomplete="off"
                                                     onChange={(e) => setEditLimpezaInterna(e.target.value)} />
                                                 <button type="submit" onClick={() => handleEdit(item.id, editdiaria,edithora,editmensal,editlimpezaCompleta,editlimpezaExterna,editlimpezaInterna)}>Alterar</button>

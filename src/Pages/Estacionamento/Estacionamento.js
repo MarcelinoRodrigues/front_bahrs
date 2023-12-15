@@ -71,18 +71,10 @@ export default function Estacionamento() {
       let resultado = 0;
       //TODO: qualquer alteração de enum Limpeza altera o valor do tratamento
       switch (recebeSendLimpeza) {
-         case "Completa":
-            resultado = 1;
-            break;
-         case "Interna":
-            resultado = 2;
-            break;
-         case "Externa":
-            resultado = 3;
-            break;
-         default:
-            resultado = 0;
-            break;
+         case "Completa": resultado = 1; break;
+         case "Interna": resultado = 2; break;
+         case "Externa": resultado = 3; break;
+         default: resultado = 0; break;
       }
       return resultado;
    }
@@ -90,16 +82,13 @@ export default function Estacionamento() {
    const options = Object.keys(Limpeza).map((key) => (
       <Option key={key} value={Limpeza[key]}>
          {Limpeza[key]}
-      </Option>
-   ));
+      </Option>));
 
    const HandleSubmit = async (e) => {
       e.preventDefault();
       let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
-
       try {
          const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-
          await axios.post("https://localhost:44311/api/Estacionamento/", {
             id: 0,
             Entrada: formattedDate,
@@ -115,10 +104,7 @@ export default function Estacionamento() {
          const result = await axios('https://localhost:44311/api/Estacionamento');
          setData(result.data);
          setAddModalOpen(false);
-
-      } catch (error) {
-         console.log(error);
-      }
+      } catch (error) { }
    };
 
    const handleRemove = async (id) => {
@@ -133,9 +119,7 @@ export default function Estacionamento() {
          const reload = await axios('https://localhost:44311/api/Estacionamento');
          setData(reload.data);
          setExclude(true);
-      } catch (error) {
-         console.error(error);
-      }
+      } catch (error) { }
    };
 
    const formatDate = (date) => {
@@ -184,23 +168,20 @@ export default function Estacionamento() {
                      const result = await axios('https://localhost:44311/api/Estacionamento');
                      setData(result.data);
                      setSuccessSaida(true);
-                  } catch (error) {
-                     console.error(error);
-                  }
+                  } catch (error) { }
                }
 
                const ExecuteEdit = (item) => {
                   setModalOpen(true);
-                  setItemToEdit(
-                     {
-                        id: item.id,
-                        placa: item.placa,
-                        vagaId: item.vagaId,
-                        mensalistaId: item.mensalistaId,
-                        limpeza: item.limpeza,
-                        funcionarioId: item.funcionarioId,
-                        entrada: item.entrada
-                     });
+                  setItemToEdit({
+                     id: item.id,
+                     placa: item.placa,
+                     vagaId: item.vagaId,
+                     mensalistaId: item.mensalistaId,
+                     limpeza: item.limpeza,
+                     funcionarioId: item.funcionarioId,
+                     entrada: item.entrada
+                  });
                }
 
                const handleEdit = async (item) => {
@@ -208,9 +189,12 @@ export default function Estacionamento() {
                      await axios.put(`https://localhost:44311/api/Estacionamento/`, {
                         id: item.id,
                         entrada: item.entrada,
+                        vaga: null,
                         vencimento: null,
+                        mensalista: null,
                         mensalistaId: item.mensalistaId,
                         placa: item.placa,
+                        funcionario: item.funcionario,
                         valor: null,
                         funcionarioId: item.funcionarioId,
                         vagaId: item.vagaId,
@@ -219,9 +203,7 @@ export default function Estacionamento() {
 
                      const result = await axios('https://localhost:44311/api/Estacionamento');
                      setData(result.data);
-                  } catch (error) {
-                     console.error(error);
-                  }
+                  } catch (error) { }
                };
 
                return (
@@ -234,8 +216,7 @@ export default function Estacionamento() {
                      <TableCell>{item.valor === null ? '' : item.valor + '$'}</TableCell>
                      <TableCell>{nomeVaga}</TableCell>
                      <TableCell>{Limpeza[item.limpeza]}</TableCell>
-                     <TDFlex>
-                        {/* Modal de Edição */}
+                     <TDFlex>{/* Modal de Edição */}
                         {(<Modal isOpen={isModalOpen}>
                            <ModalContent>
                               <h2>Editar</h2>
@@ -245,23 +226,17 @@ export default function Estacionamento() {
                                     type="text"
                                     autoComplete="off"
                                     value={itemToEdit.placa}
-                                    onChange={(event) => setItemToEdit({ ...itemToEdit, placa: event.target.value })}
-                                 />
+                                    onChange={(event) => setItemToEdit({ ...itemToEdit, placa: event.target.value })} />
                                  <Label><h2>Funcionario:</h2>
                                     <Select value={itemToEdit.funcionarioId} required
-                                       onChange={(event) => setItemToEdit({ ...itemToEdit, funcionarioId: event.target.value })}
-                                    >
+                                       onChange={(event) => setItemToEdit({ ...itemToEdit, funcionarioId: event.target.value })}>
                                        <Option value="">Selecione uma opção</Option>
-                                       {funcionarios.map((funcionarios) => (
-                                          <Option key={funcionarios.id}
-                                             value={funcionarios.id}
-                                          >{funcionarios.nome}
-                                          </Option>
-                                       ))}
+                                       {funcionarios.map((funcionarios) => (<Option key={funcionarios.id} value={funcionarios.id}>{funcionarios.nome}</Option>))}
                                     </Select>
                                  </Label>
                                  <Label><h2>Limpeza:</h2>
-                                    <Select value={itemToEdit.limpeza}
+                                    <Select value={Limpeza[itemToEdit.limpeza]}
+                                       disabled={true}
                                        onChange={(event) => setItemToEdit({ ...itemToEdit, limpeza: event.target.value })}>
                                        {options}
                                     </Select>
@@ -271,46 +246,33 @@ export default function Estacionamento() {
                               </EditForm>
                            </ModalContent>
                         </Modal>)}
-                        <NotaButton> Gerar Nota</NotaButton>
-                        <ExitButton onClick={() => ExecuteExit(item.id)}> Saída</ExitButton>
-                        <EditButton onClick={() => ExecuteEdit(item)}> Editar </EditButton>
+                        <NotaButton>Gerar Nota</NotaButton>
+                        <ExitButton onClick={() => ExecuteExit(item.id)}>Saída</ExitButton>
+                        <EditButton onClick={() => ExecuteEdit(item)}>Editar </EditButton>
                         <DeleteButton onClick={() => handleRemove(item.id)}>Remover</DeleteButton>
                      </TDFlex>
-                  </TableRow>
-               );
+                  </TableRow>);
             })}
-         </StyledTable>
-         {/* Modal de inclusão */}
+         </StyledTable>{/* Modal de inclusão */}
          <Modal isOpen={isAddModalOpen}>
             <ModalContent>
                <h2>Novo Registro</h2>
                <EditForm
                   onSubmit={(e) => {
                      e.preventDefault();
-                     if (e.nativeEvent.submitter.name === 'submitBtn') {
-                        HandleSubmit(e);
-                     } else {
-                        setAddModalOpen(false);
-                     }
+                     if (e.nativeEvent.submitter.name === 'submitBtn') { HandleSubmit(e); }
+                     else { setAddModalOpen(false); }
                   }}>
                   <Label>Entrada:
                      <input
                         type="text"
                         value={formatDate(date)}
-                        readOnly
-                        disabled={true}
-                        onChange={() => { }}
-                     />
+                        disabled={true} />
                   </Label>
                   <Label>Mensalista:
                      <Select value={selectedMensalista} onChange={(event) => setSelectedMensalista(event.target.value)}>
                         <Option value="">Selecione uma opção</Option>
-                        {mensalistas.map((mensalista) => (
-                           <Option key={mensalista.id}
-                              value={mensalista.id}>
-                              {mensalista.nome}
-                           </Option>
-                        ))}
+                        {mensalistas.map((mensalista) => (<Option key={mensalista.id} value={mensalista.id}> {mensalista.nome} </Option>))}
                      </Select>
                   </Label>
                   <Label><span>Placa:</span> <IMG src={RequiredIcon}></IMG>
@@ -322,30 +284,17 @@ export default function Estacionamento() {
                   <Label><span>Funcionario: </span><IMG src={RequiredIcon}></IMG>
                      <Select value={selectedFuncionario} onChange={(event) => setSelectedFuncionario(event.target.value)} required>
                         <Option value="">Selecione uma opção</Option>
-                        {funcionarios.map((funcionarios) => (
-                           <Option key={funcionarios.id}
-                              value={funcionarios.id}
-                              onChange={(event) => setFuncionarios(event.target.value)}>
-                              {funcionarios.nome}
-                           </Option>
-                        ))}
+                        {funcionarios.map((funcionarios) => (<Option key={funcionarios.id} value={funcionarios.id} onChange={(event) => setFuncionarios(event.target.value)}> {funcionarios.nome} </Option>))}
                      </Select>
                   </Label>
                   <Label><span>Vaga: </span><IMG src={RequiredIcon}></IMG>
                      <Select value={selectedVaga} onChange={(event) => setSelectedVaga(event.target.value)} required>
                         <Option value="">Selecione uma opção</Option>
-                        {vaga.map((vagas) => (
-                           <Option key={vagas.id}
-                              value={vagas.id}>
-                              {vagas.nome}
-                           </Option>
-                        ))}
+                        {vaga.map((vagas) => (<Option key={vagas.id} value={vagas.id}> {vagas.nome} </Option>))}
                      </Select>
                   </Label>
                   <Label>Limpeza:
-                     <Select value={sendLimpeza} onChange={(event) => setSendLimpeza(event.target.value)}>
-                        {options}
-                     </Select>
+                     <Select value={sendLimpeza} onChange={(event) => setSendLimpeza(event.target.value)}> {options} </Select>
                   </Label>
                   <button type="submit" name="submitBtn">Adicionar</button>
                   <CloseButton onClick={() => setAddModalOpen(false)}>Fechar</CloseButton>

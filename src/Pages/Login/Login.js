@@ -10,7 +10,6 @@ export default function LoginForm() {
         password: ''
     });
 
-    //usado para atualizar o estado a medida que os usuários digitam nos campos
     const handleInputChange = event => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
@@ -59,7 +58,7 @@ export default function LoginForm() {
                         onChange={handleInputChange}
                     />
 
-                    <Button type='submit' backgroundColor="#FFC312" color='black'>
+                    <Button hovercolor={'#000'} type='submit' color='black'>
                         Entrar
                     </Button>
                     <ContainerLink>
