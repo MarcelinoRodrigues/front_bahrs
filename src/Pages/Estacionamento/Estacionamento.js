@@ -16,6 +16,9 @@ export default function Estacionamento() {
    const [vagas, setVagas] = useState([]);
    const [verificaSaida, setVerificaSaida] = useState(false);
    const [catchSaida, setCatchSaida] = useState(false);
+   const [verifyPlaca, setVerifyPlaca] = useState(false);
+   const [searchPlaca, setSearchPlaca] = useState(false);
+   const [include, setInclude] = useState(false);
    const [exclude, setExclude] = useState(false);
    const [successSaida, setSuccessSaida] = useState(false);
    const [isModalOpen, setModalOpen] = useState(false);
@@ -59,18 +62,22 @@ export default function Estacionamento() {
       successSaida && setTimeout(closeSaida, 1100);
       verificaSaida && setTimeout(handleCloseSaida, 1800);
       catchSaida && setTimeout(handleCloseCatchSaida, 1800);
+      verifyPlaca && setTimeout(handleCloseVerifyPlaca, 1900);
+      include && setTimeout(handleCloseInclude, 1800);
 
       fetchVagas();
       fetchData();
       fetchMensalistas();
       fetchFuncionario();
       fetchVaga();
-   }, [verificaSaida, exclude, successSaida, catchSaida]);
+   }, [verificaSaida, include, exclude, successSaida, catchSaida, verifyPlaca]);
 
+   const handleCloseInclude = () => setInclude(false);
    const handleCloseSaida = () => setVerificaSaida(false);
    const handleCloseExclude = () => setExclude(false);
    const closeSaida = () => setSuccessSaida(false);
    const handleCloseCatchSaida = () => setCatchSaida(false);
+   const handleCloseVerifyPlaca = () => setVerifyPlaca(false);
 
    const TratarDadosLimpeza = (recebeSendLimpeza) => {
       let resultado = 0;
@@ -89,8 +96,18 @@ export default function Estacionamento() {
          {Limpeza[key]}
       </Option>));
 
-   const HandleSubmit = async (e) => {
-      e.preventDefault();
+   const HandleSubmit = async () => {
+      const regexPlaca = /^[A-Z]{3}[0-9][0-9A-Z][0-9]{2}$/;
+
+      data.map(item => {
+         if (item.placa === sendPlaca) {
+            setVerifyPlaca(true);
+         }});
+
+      if (!regexPlaca.test(sendPlaca)) {
+         setSearchPlaca(true);
+      } 
+
       let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
       try {
          const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
@@ -111,6 +128,7 @@ export default function Estacionamento() {
          const result = await axios('https://localhost:44311/api/Estacionamento');
          setData(result.data);
          setAddModalOpen(false);
+         setInclude(true);
       } catch (error) { }
    };
 
@@ -119,13 +137,15 @@ export default function Estacionamento() {
          const result = await axios('https://localhost:44311/api/Estacionamento');
          const verificaSaida = result.data.find(e => e.id === id && e.vencimento === null);
 
-         verificaSaida
-            ? setVerificaSaida(true)
-            : await axios.delete(`https://localhost:44311/api/Estacionamento/${id}`);
+         if (verificaSaida) {
+            setVerificaSaida(true);
+         } else {
+            await axios.delete(`https://localhost:44311/api/Estacionamento/${id}`);
+            const reload = await axios('https://localhost:44311/api/Estacionamento');
+            setData(reload.data);
+            setExclude(true);
+         }
 
-         const reload = await axios('https://localhost:44311/api/Estacionamento');
-         setData(reload.data);
-         setExclude(true);
       } catch (error) { }
    };
 
@@ -182,12 +202,12 @@ export default function Estacionamento() {
                   try {
                      const objNota = await axios.get(`https://localhost:44311/api/Estacionamento/${id}`);
 
-                     if(objNota.data.vencimento === null){
+                     if (objNota.data.vencimento === null) {
                         setCatchSaida(true)
-                     }else{
-                        setDadosDaApi(objNota.data); 
-                        setCupomVisible(true); 
-                        return objNota.data; 
+                     } else {
+                        setDadosDaApi(objNota.data);
+                        setCupomVisible(true);
+                        return objNota.data;
                      }
                   } catch (error) { }
                }
@@ -281,7 +301,7 @@ export default function Estacionamento() {
                <EditForm
                   onSubmit={(e) => {
                      e.preventDefault();
-                     if (e.nativeEvent.submitter.name === 'submitBtn') { HandleSubmit(e); }
+                     if (e.nativeEvent.submitter.name === 'submitBtn') { HandleSubmit(); }
                      else { setAddModalOpen(false); }
                   }}>
                   <Label>Entrada:
@@ -323,9 +343,12 @@ export default function Estacionamento() {
             </ModalContent>
          </Modal>
          <div>{verificaSaida && <Alert message="O estacionamento não pode ser removido sem marcar saída antes" />}</div>
+         <div>{include && <Alert message="Registro Incluido com Sucesso!" />}</div>
          <div>{exclude && <Alert message="Registro Excluiso com Sucesso!" />}</div>
          <div>{successSaida && <Alert message="Saída Confirmada!" />}</div>
          <div>{catchSaida && <Alert message="Selecione a saída antes de gerar a Nota" />}</div>
+         <div>{verifyPlaca && <Alert message="Esta placa já está no patio" />}</div>
+         <div>{searchPlaca && <Alert onClose={() => setSearchPlaca(false)} showCloseButton={true} message="Existem dois sistemas alfanuméricos: o atual, com quatro letras e três números, no formato ABC1D23 ou com três letras e quatro números, no formato ABC·1234" />}</div>
          {isCupomVisible && <CupomComponent dadosDaApi={dadosDaApi} onClose={() => setCupomVisible(false)} />}
       </div>
    );

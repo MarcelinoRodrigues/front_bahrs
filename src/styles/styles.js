@@ -369,3 +369,18 @@ export const CloseButton = styled.button`
     background-color: #c0392b;
   }
 `;
+
+export const DisableButton = styled.button`
+  background-color: #ccc;
+  padding: 8px 15px;
+  font-size: 14px;
+  border: none;
+  cursor: not-allowed;
+  display: inline-block;
+  margin-right: 12px;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.6;
+  }
+`;
