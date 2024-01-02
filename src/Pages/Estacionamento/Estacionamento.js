@@ -7,6 +7,7 @@ import moment from 'moment';
 import Alert from '../../components/Alert';
 import { IMG, Label, Option, Select } from './styles';
 import RequiredIcon from '../../Assets/iconspontodeexclamacao.png';
+import CupomComponent from './CupomComponent';
 
 export default function Estacionamento() {
    const [data, setData] = useState([]);
@@ -14,17 +15,19 @@ export default function Estacionamento() {
    const [funcionarios, setFuncionarios] = useState([]);
    const [vagas, setVagas] = useState([]);
    const [verificaSaida, setVerificaSaida] = useState(false);
+   const [catchSaida, setCatchSaida] = useState(false);
    const [exclude, setExclude] = useState(false);
    const [successSaida, setSuccessSaida] = useState(false);
    const [isModalOpen, setModalOpen] = useState(false);
    const [isAddModalOpen, setAddModalOpen] = useState(false);
    const [itemToEdit, setItemToEdit] = useState('');
-
+   const [isCupomVisible, setCupomVisible] = useState(false);
    const [sendPlaca, setSendPlaca] = useState('');
    const [sendLimpeza, setSendLimpeza] = useState('');
    const [selectedVaga, setSelectedVaga] = useState('');
    const [selectedMensalista, setSelectedMensalista] = useState('');
    const [selectedFuncionario, setSelectedFuncionario] = useState('');
+   const [dadosDaApi, setDadosDaApi] = useState(null);
    const [vaga, setVaga] = useState([]);
    const date = new Date();
 
@@ -55,17 +58,19 @@ export default function Estacionamento() {
       exclude && setTimeout(handleCloseExclude, 1100);
       successSaida && setTimeout(closeSaida, 1100);
       verificaSaida && setTimeout(handleCloseSaida, 1800);
+      catchSaida && setTimeout(handleCloseCatchSaida, 1800);
 
       fetchVagas();
       fetchData();
       fetchMensalistas();
       fetchFuncionario();
       fetchVaga();
-   }, [verificaSaida, exclude, successSaida]);
+   }, [verificaSaida, exclude, successSaida, catchSaida]);
 
    const handleCloseSaida = () => setVerificaSaida(false);
    const handleCloseExclude = () => setExclude(false);
    const closeSaida = () => setSuccessSaida(false);
+   const handleCloseCatchSaida = () => setCatchSaida(false);
 
    const TratarDadosLimpeza = (recebeSendLimpeza) => {
       let resultado = 0;
@@ -171,6 +176,20 @@ export default function Estacionamento() {
                   } catch (error) { }
                }
 
+               const GerarNota = async (id) => {
+                  try {
+                     const objNota = await axios.get(`https://localhost:44311/api/Estacionamento/${id}`);
+
+                     if(objNota.data.vencimento === null){
+                        setCatchSaida(true)
+                     }else{
+                        setDadosDaApi(objNota.data); 
+                        setCupomVisible(true); 
+                        return objNota.data; 
+                     }
+                  } catch (error) { }
+               }
+
                const ExecuteEdit = (item) => {
                   setModalOpen(true);
                   setItemToEdit({
@@ -246,7 +265,7 @@ export default function Estacionamento() {
                               </EditForm>
                            </ModalContent>
                         </Modal>)}
-                        <NotaButton>Gerar Nota</NotaButton>
+                        <NotaButton onClick={() => GerarNota(item.id)} >Gerar Nota</NotaButton>
                         <ExitButton onClick={() => ExecuteExit(item.id)}>Saída</ExitButton>
                         <EditButton onClick={() => ExecuteEdit(item)}>Editar </EditButton>
                         <DeleteButton onClick={() => handleRemove(item.id)}>Remover</DeleteButton>
@@ -304,6 +323,8 @@ export default function Estacionamento() {
          <div>{verificaSaida && <Alert message="O estacionamento não pode ser removido sem marcar saída antes" />}</div>
          <div>{exclude && <Alert message="Registro Excluiso com Sucesso!" />}</div>
          <div>{successSaida && <Alert message="Saída Confirmada!" />}</div>
+         <div>{catchSaida && <Alert message="Selecione a saída antes de gerar a Nota" />}</div>
+         {isCupomVisible && <CupomComponent dadosDaApi={dadosDaApi} onClose={() => setCupomVisible(false)} />}
       </div>
    );
 }

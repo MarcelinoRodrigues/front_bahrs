@@ -8,6 +8,7 @@ export default function Funcionario() {
    const [data, setData] = useState([]);
    const [exclude, setExclude] = useState(false);
    const [success, setSuccess] = useState(false);
+   const [edit, setEdit] = useState(false);
    const [editingItem, setEditingItem] = useState(null);
    const [isModalOpen, setModalOpen] = useState(false);
    const [isAddModalOpen, setAddModalOpen] = useState(false);
@@ -22,13 +23,15 @@ export default function Funcionario() {
 
       exclude && setTimeout(handleCloseExclude, 1100);
       success && setTimeout(handleCloseSuccess, 1100);
+      edit && setTimeout(handleCloseEdit, 1100);
       catchName && setTimeout(handleCloseCatchName, 1100);
 
       fetchData();
-   }, [exclude, success, catchName]);
+   }, [exclude, success, edit, catchName]);
 
    const handleCloseExclude = () => setExclude(false);
    const handleCloseSuccess = () => setSuccess(false);
+   const handleCloseEdit = () => setEdit(false);
    const handleCloseCatchName = () => setCatchName(false);
 
    const handleRemoveSubmit = async (id) => {
@@ -58,6 +61,7 @@ export default function Funcionario() {
          setData(result.data);
          setModalOpen(false);
          setEditingItem(null);
+         setEdit(true);
       } catch (error) {
          console.error(error);
       }
@@ -158,6 +162,9 @@ export default function Funcionario() {
          </Modal>
          <div>
             {exclude && <Alert message="Registro Excluído com Sucesso!" />}
+         </div>
+         <div>
+            {edit && <Alert message="Registro Editado com Sucesso!" />}
          </div>
          <div>
             {success && <Alert message="Registro Incluído com Sucesso!" />}
