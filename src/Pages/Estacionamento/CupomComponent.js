@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { CupomContainer } from './styledCupom';
 
 const CupomComponent = ({ dadosDaApi, onClose }) => {
@@ -10,10 +11,10 @@ const CupomComponent = ({ dadosDaApi, onClose }) => {
    return (
       <CupomContainer>
          <h2>Cupom Fiscal</h2>
-         <p><strong>Nome:</strong> {dadosDaApi.entrada}</p>
-         <p><strong>Vencimento:</strong> {dadosDaApi.vencimento}</p>
+         <p><strong>Entrada:</strong> {moment(dadosDaApi.entrada).format('DD-MM-YYYY HH:mm')}</p>
+         <p><strong>Saída:</strong> {moment(dadosDaApi.vencimento).format('DD-MM-YYYY HH:mm')}</p>
          <p><strong>Placa:</strong> {dadosDaApi.placa}</p>
-         <p><strong>Valor:</strong> {dadosDaApi.valor}</p>
+         <p><strong>Valor:</strong>  R${dadosDaApi.valor}</p>
          <ul>
             <button onClick={handlePrint}>Imprimir</button>
             <button className='Cancel' onClick={onClose}>Cancelar</button>
