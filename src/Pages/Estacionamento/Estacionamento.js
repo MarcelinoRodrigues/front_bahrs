@@ -95,11 +95,13 @@ export default function Estacionamento() {
       try {
          const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
          await axios.post("https://localhost:44311/api/Estacionamento/", {
-            id: 0,
             Entrada: formattedDate,
             Vaga: null,
+            vencimento: null,
+            mensalista: null,
             mensalistaId: selectedMensalista !== "" ? selectedMensalista : null,
             Placa: sendPlaca,
+            funcionario: null,
             valor: null,
             FuncionarioId: selectedFuncionario,
             VagaId: selectedVaga,
