@@ -36,7 +36,7 @@ const Alert = ({ message, showCloseButton, onClose }) => {
     return (
       <ModalWrapper>
         <Message>{message}</Message>
-        {showCloseButton && <CloseButton onClick={onClose}>Fechar</CloseButton>}
+        {showCloseButton && <CloseButton onClick={onClose}>X</CloseButton>}
       </ModalWrapper>
     );
 };

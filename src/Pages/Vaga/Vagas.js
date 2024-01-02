@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, CloseButton, DeleteButton, EditButton, EditForm, HeaderCell, Modal, ModalContent, StyledTable, TableCell, TableHeader, TableRow, TDConditional} from '../../styles/styles';
+import { Button, CloseButton, DeleteButton, DisableButton, EditButton, EditForm, HeaderCell, Modal, ModalContent, StyledTable, TableCell, TableHeader, TableRow, TDConditional } from '../../styles/styles';
 import Nav from "../../components/Nav";
 import Alert from '../../components/Alert';
 
@@ -30,7 +30,7 @@ export default function Vaga() {
       catchName && setTimeout(handleCloseCatchName, 1100);
 
       fetchData();
-   }, [vagaOcupada, exclude, success,edit, catchName]);
+   }, [vagaOcupada, exclude, success, edit, catchName]);
 
    const handleCloseExclude = () => setExclude(false);
    const handleCloseAlert = () => setVagaOcupada(false);
@@ -77,7 +77,7 @@ export default function Vaga() {
       try {
          if (data.some(item => item.nome === nome)) {
             setCatchName(true);
-         }else{
+         } else {
             await axios.put(`https://localhost:44311/api/Vagas/${id}`, {
                id: id,
                nome: nome,
@@ -103,20 +103,20 @@ export default function Vaga() {
       <div className="main">
          <Nav />
          <Button type="default" onClick={() => { setNome(''); setAddModalOpen(true); }}>Novo Registro</Button>
-         { (
+         {(
             <Modal isOpen={isAddModalOpen}>
                <ModalContent>
                   <h2>Novo Registro</h2>
                   <EditForm
-                  onSubmit={(e) => {
-                     e.preventDefault();
-                     if (e.nativeEvent.submitter.name === 'submitBtn') {
-                        handleSubmit(e);
-                     } else {
-                        setAddModalOpen(false);
-                        setNome('');
-                     }
-                  }}>
+                     onSubmit={(e) => {
+                        e.preventDefault();
+                        if (e.nativeEvent.submitter.name === 'submitBtn') {
+                           handleSubmit(e);
+                        } else {
+                           setAddModalOpen(false);
+                           setNome('');
+                        }
+                     }}>
                      <input
                         type="text"
                         name="nome"
@@ -130,51 +130,49 @@ export default function Vaga() {
                </ModalContent>
             </Modal>
          )}
-            <StyledTable>
-               <TableHeader>
-                     <HeaderCell>Nome</HeaderCell>
-                     <HeaderCell>Status</HeaderCell>
-                     <HeaderCell>Ações</HeaderCell>
-               </TableHeader>
-                  {data.map((item) => (
-                     <TableRow key={item.id}>
-                        <TableCell>{item.nome}</TableCell>
-                        <TDConditional status={item.status}>
-                           {item.status === 0 ? 'Ativo' : 'Ocupado'}
-                        </TDConditional>
-                        <TableCell>
-                           { (
-                              <Modal isOpen={isModalOpen}>
-                                 <ModalContent>
-                                    <h2>Editar</h2>
-                                    <EditForm>
-                                       <input
-                                          type="text"
-                                          name="nomeVaga"
-                                          placeholder='Nome'
-                                          value={nomeVaga}
-                                          autocomplete="off"
-                                          onChange={(e) => setNomeVaga(e.target.value)} />
-                                       <button type="submit" onClick={() => handleEdit(editingItemId, nomeVaga, item.status)}>Alterar</button>
-                                       <CloseButton onClick={() => setModalOpen(false)}>Fechar</CloseButton>
-                                    </EditForm>
-                                 </ModalContent>
-                              </Modal>
-                           )}
-                           <EditButton
-                              onClick={() => openModalWithItem(item.id)}
-                           >
-                              Editar
-                           </EditButton>
-                           <DeleteButton
-                              onClick={() => handleRemove(item.id)}
-                           >
-                              Excluir
-                           </DeleteButton>
-                        </TableCell>
-                     </TableRow>
-                  ))}
-            </StyledTable>
+         <StyledTable>
+            <TableHeader>
+               <HeaderCell>Nome</HeaderCell>
+               <HeaderCell>Status</HeaderCell>
+               <HeaderCell>Ações</HeaderCell>
+            </TableHeader>
+            {data.map((item) => (
+               <TableRow key={item.id}>
+                  <TableCell>{item.nome}</TableCell>
+                  <TDConditional status={item.status}>
+                     {item.status === 0 ? 'Ativo' : 'Ocupado'}
+                  </TDConditional>
+                  <TableCell>
+                     {(
+                        <Modal isOpen={isModalOpen}>
+                           <ModalContent>
+                              <h2>Editar</h2>
+                              <EditForm>
+                                 <input
+                                    type="text"
+                                    name="nomeVaga"
+                                    placeholder='Nome'
+                                    value={nomeVaga}
+                                    autocomplete="off"
+                                    onChange={(e) => setNomeVaga(e.target.value)} />
+                                 <button type="submit" onClick={() => handleEdit(editingItemId, nomeVaga, item.status)}>Alterar</button>
+                                 <CloseButton onClick={() => setModalOpen(false)}>Fechar</CloseButton>
+                              </EditForm>
+                           </ModalContent>
+                        </Modal>
+                     )}
+                     {
+                     item.status === 0 ? <EditButton onClick={() => openModalWithItem(item.id)}> Editar </EditButton> 
+                     : 
+                     <DisableButton> Editar </DisableButton>
+                     }
+                     <DeleteButton
+                        onClick={() => handleRemove(item.id)}> Excluir
+                     </DeleteButton>
+                  </TableCell>
+               </TableRow>
+            ))}
+         </StyledTable>
          <div>
             {vagaOcupada && <Alert message="A vaga está ocupada" />}
          </div>
