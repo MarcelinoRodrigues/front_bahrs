@@ -10,7 +10,7 @@ const CupomComponent = ({ dadosDaApi, onClose }) => {
 
    return (
       <CupomContainer>
-         <h2>Cupom Fiscal</h2>
+         <h2>Cupom não Fiscal</h2>
          <p><strong>Entrada:</strong> {moment(dadosDaApi.entrada).format('DD-MM-YYYY HH:mm')}</p>
          <p><strong>Saída:</strong> {moment(dadosDaApi.vencimento).format('DD-MM-YYYY HH:mm')}</p>
          <p><strong>Placa:</strong> {dadosDaApi.placa}</p>
