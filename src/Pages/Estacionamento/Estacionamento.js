@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, CloseButton, DeleteButton, EditButton, EditForm, ExitButton, HeaderCell, Input, Modal, ModalContent, NotaButton, StyledTable, TableCell, TableHeader, TableRow, TDFlex, THCenter } from '../../styles/styles';
+import { Button, CloseButton, DeleteButton, DisableButton, EditButton, EditForm, ExitButton, HeaderCell, Input, Modal, ModalContent, NotaButton, StyledTable, TableCell, TableHeader, TableRow, TDFlex, THCenter } from '../../styles/styles';
 import Nav from "../../components/Nav";
 import { Limpeza } from '../../services/Traducoes';
 import moment from 'moment';
@@ -330,8 +330,18 @@ export default function Estacionamento() {
                            </ModalContent>
                         </Modal>)}
                         <NotaButton onClick={() => GerarNota(item.id)} >Gerar Nota</NotaButton>
-                        <ExitButton onClick={() => ExecuteExit(item.id)}>Saída</ExitButton>
-                        <EditButton onClick={() => ExecuteEdit(item)}>Editar </EditButton>
+                        {
+                           item.vencimento === null ?
+                              <>
+                                 <ExitButton onClick={() => ExecuteExit(item.id)}>Saída</ExitButton>
+                                 <EditButton onClick={() => ExecuteEdit(item)}>Editar </EditButton>
+                              </>
+                              :
+                              <>
+                                 <DisableButton> Saída </DisableButton>
+                                 <DisableButton> Editar </DisableButton>
+                              </>
+                        }
                         <DeleteButton onClick={() => handleRemove(item.id)}>Remover</DeleteButton>
                      </TDFlex>
                   </TableRow>);
@@ -384,19 +394,19 @@ export default function Estacionamento() {
                </EditForm>
             </ModalContent>
          </Modal>
-         <div>{verificaSaida && <Alert message="O estacionamento não pode ser removido sem marcar saída antes" />}</div>
-         <div>{include && <Alert message="Registro Incluido com Sucesso!" />}</div>
-         <div>{exclude && <Alert message="Registro Excluiso com Sucesso!" />}</div>
-         <div>{successSaida && <Alert message="Saída Confirmada!" />}</div>
-         <div>{catchSaida && <Alert message="Selecione a saída antes de gerar a Nota" />}</div>
-         <div>{verifyPlaca && <Alert message="Esta placa já está no patio" />}</div>
-         <div>{searchPlaca && <Alert onClose={() => setSearchPlaca(false)} showCloseButton={true} message="Existem dois sistemas alfanuméricos: o atual, com quatro letras e três números, no formato ABC1D23 ou com três letras e quatro números, no formato ABC·1234" />}</div>
-         <div>{catchSettingsCompleta && <Alert onClose={() => setCatchSettingsCompleta(false)} showCloseButton={true}
-            message="Erro! Por favor informar o valor da Limpeza completa em configurações" />}</div>
-         <div>{catchSettingsInterna && <Alert onClose={() => setCatchSettingsInterna(false)} showCloseButton={true}
-            message="Erro! Por favor informar o valor da Limpeza Interna em configurações" />}</div>
-         <div>{catchSettingsExterna && <Alert onClose={() => setCatchSettingsExterna(false)} showCloseButton={true}
-            message="Erro! Por favor informar o valor da Limpeza Externa em configurações" />}</div>
+         {verificaSaida && <Alert message="O estacionamento não pode ser removido sem marcar saída antes" />}
+         {include && <Alert message="Registro Incluido com Sucesso!" />}
+         {exclude && <Alert message="Registro Excluiso com Sucesso!" />}
+         {successSaida && <Alert message="Saída Confirmada!" />}
+         {catchSaida && <Alert message="Selecione a saída antes de gerar a Nota" />}
+         {verifyPlaca && <Alert message="Esta placa já está no patio" />}
+         {searchPlaca && <Alert onClose={() => setSearchPlaca(false)} showCloseButton={true} message="Existem dois sistemas alfanuméricos: o atual, com quatro letras e três números, no formato ABC1D23 ou com três letras e quatro números, no formato ABC·1234" />}
+         {catchSettingsCompleta && <Alert onClose={() => setCatchSettingsCompleta(false)} showCloseButton={true}
+            message="Erro! Por favor informar o valor da Limpeza completa em configurações" />}
+         {catchSettingsInterna && <Alert onClose={() => setCatchSettingsInterna(false)} showCloseButton={true}
+            message="Erro! Por favor informar o valor da Limpeza Interna em configurações" />}
+         {catchSettingsExterna && <Alert onClose={() => setCatchSettingsExterna(false)} showCloseButton={true}
+            message="Erro! Por favor informar o valor da Limpeza Externa em configurações" />}
 
          {isCupomVisible && <CupomComponent dadosDaApi={dadosDaApi} onClose={() => setCupomVisible(false)} />}
       </div>
