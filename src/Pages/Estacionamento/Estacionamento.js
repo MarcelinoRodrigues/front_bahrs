@@ -14,10 +14,14 @@ export default function Estacionamento() {
    const [mensalistas, setMensalistas] = useState([]);
    const [funcionarios, setFuncionarios] = useState([]);
    const [vagas, setVagas] = useState([]);
+   const [config, setConfig] = useState([]);
    const [verificaSaida, setVerificaSaida] = useState(false);
    const [catchSaida, setCatchSaida] = useState(false);
    const [verifyPlaca, setVerifyPlaca] = useState(false);
    const [searchPlaca, setSearchPlaca] = useState(false);
+   const [catchSettingsCompleta, setCatchSettingsCompleta] = useState(false);
+   const [catchSettingsInterna, setCatchSettingsInterna] = useState(false);
+   const [catchSettingsExterna, setCatchSettingsExterna] = useState(false);
    const [include, setInclude] = useState(false);
    const [exclude, setExclude] = useState(false);
    const [successSaida, setSuccessSaida] = useState(false);
@@ -58,6 +62,11 @@ export default function Estacionamento() {
          setVagas(result.data);
       };
 
+      const fetchConfig = async () => {
+         const result = await axios('https://localhost:44311/api/Configuracoes');
+         setConfig(result.data);
+      }
+
       exclude && setTimeout(handleCloseExclude, 1100);
       successSaida && setTimeout(closeSaida, 1100);
       verificaSaida && setTimeout(handleCloseSaida, 1800);
@@ -70,6 +79,7 @@ export default function Estacionamento() {
       fetchMensalistas();
       fetchFuncionario();
       fetchVaga();
+      fetchConfig();
    }, [verificaSaida, include, exclude, successSaida, catchSaida, verifyPlaca]);
 
    const handleCloseInclude = () => setInclude(false);
@@ -91,6 +101,33 @@ export default function Estacionamento() {
       return resultado;
    }
 
+   const ValidarConfiguracao = (setarLimpeza) => {
+      let completa = config.limpezaCompleta;
+      let externa = config.limpezaExterna;
+      let interna = config.limpezaInterna;
+
+      switch (setarLimpeza) {
+         case 1:
+            if (!completa) {
+               setCatchSettingsCompleta(true);
+               return 1;
+            }
+            break;
+         case 2:
+            if (!interna) {
+               setCatchSettingsInterna(true);
+               return 2;
+            }
+            break;
+         case 3:
+            if (!externa) {
+               setCatchSettingsExterna(true);
+               return 3;
+            }
+            break;
+      }
+   }
+
    const options = Object.keys(Limpeza).map((key) => (
       <Option key={key} value={Limpeza[key]}>
          {Limpeza[key]}
@@ -102,34 +139,39 @@ export default function Estacionamento() {
       data.map(item => {
          if (item.placa === sendPlaca) {
             setVerifyPlaca(true);
-         }});
+         }
+      });
 
       if (!regexPlaca.test(sendPlaca)) {
          setSearchPlaca(true);
-      } 
+      }
 
       let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
-      try {
-         const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
-         await axios.post("https://localhost:44311/api/Estacionamento/", {
-            Entrada: formattedDate,
-            Vaga: null,
-            vencimento: null,
-            mensalista: null,
-            mensalistaId: selectedMensalista !== "" ? selectedMensalista : null,
-            Placa: sendPlaca,
-            funcionario: null,
-            valor: null,
-            FuncionarioId: selectedFuncionario,
-            VagaId: selectedVaga,
-            Limpeza: setarLimpeza
-         });
+      let valueSettings = ValidarConfiguracao(setarLimpeza);
 
-         const result = await axios('https://localhost:44311/api/Estacionamento');
-         setData(result.data);
-         setAddModalOpen(false);
-         setInclude(true);
-      } catch (error) { }
+      if (valueSettings !== 1 && valueSettings !== 2 && valueSettings !== 3) {
+         try {
+            const formattedDate = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}`;
+            await axios.post("https://localhost:44311/api/Estacionamento/", {
+               Entrada: formattedDate,
+               Vaga: null,
+               vencimento: null,
+               mensalista: null,
+               mensalistaId: selectedMensalista !== "" ? selectedMensalista : null,
+               Placa: sendPlaca,
+               funcionario: null,
+               valor: null,
+               FuncionarioId: selectedFuncionario,
+               VagaId: selectedVaga,
+               Limpeza: setarLimpeza
+            });
+
+            const result = await axios('https://localhost:44311/api/Estacionamento');
+            setData(result.data);
+            setAddModalOpen(false);
+            setInclude(true);
+         } catch (error) { }
+      }
    };
 
    const handleRemove = async (id) => {
@@ -349,6 +391,13 @@ export default function Estacionamento() {
          <div>{catchSaida && <Alert message="Selecione a saída antes de gerar a Nota" />}</div>
          <div>{verifyPlaca && <Alert message="Esta placa já está no patio" />}</div>
          <div>{searchPlaca && <Alert onClose={() => setSearchPlaca(false)} showCloseButton={true} message="Existem dois sistemas alfanuméricos: o atual, com quatro letras e três números, no formato ABC1D23 ou com três letras e quatro números, no formato ABC·1234" />}</div>
+         <div>{catchSettingsCompleta && <Alert onClose={() => setCatchSettingsCompleta(false)} showCloseButton={true}
+            message="Erro! Por favor informar o valor da Limpeza completa em configurações" />}</div>
+         <div>{catchSettingsInterna && <Alert onClose={() => setCatchSettingsInterna(false)} showCloseButton={true}
+            message="Erro! Por favor informar o valor da Limpeza Interna em configurações" />}</div>
+         <div>{catchSettingsExterna && <Alert onClose={() => setCatchSettingsExterna(false)} showCloseButton={true}
+            message="Erro! Por favor informar o valor da Limpeza Externa em configurações" />}</div>
+
          {isCupomVisible && <CupomComponent dadosDaApi={dadosDaApi} onClose={() => setCupomVisible(false)} />}
       </div>
    );
