@@ -264,7 +264,30 @@ export default function Estacionamento() {
                   });
                }
 
+               const ResetValueLimpeza = (limpeza) => {
+                  let value;
+
+                  switch (limpeza) {
+                     case "N/A":
+                        value = 0;
+                        break;
+                     case "Completa":
+                        value = 1;
+                        break;
+                     case "Interna":
+                        value = 2;
+                        break;
+                     case "Externa":
+                        value = 3;
+                        break;
+                  }
+
+                  return value;
+               }
+
                const handleEdit = async () => {
+                  let resetValue = ResetValueLimpeza(itemToEdit.limpeza);
+
                   try {
                      await axios.put(`https://localhost:44311/api/Estacionamento/${itemToEdit.id}`, {
                         id: itemToEdit.id,
@@ -278,7 +301,7 @@ export default function Estacionamento() {
                         valor: null,
                         funcionarioId: itemToEdit.funcionarioId,
                         vagaId: itemToEdit.vagaId,
-                        limpeza: itemToEdit.limpeza
+                        limpeza: resetValue
                      });
 
                      const result = await axios('https://localhost:44311/api/Estacionamento');
@@ -315,7 +338,7 @@ export default function Estacionamento() {
                                  </Label>
                                  <Label><h2>Limpeza:</h2>
                                     <Select value={Limpeza[itemToEdit.limpeza]}
-                                       disabled={true}
+                                       disabled={false}
                                        onChange={(event) => setItemToEdit({ ...itemToEdit, limpeza: event.target.value })}>
                                        {options}
                                     </Select>
