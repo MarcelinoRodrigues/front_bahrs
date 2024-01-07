@@ -44,7 +44,6 @@ export default function Estacionamento() {
          const data = await response.json();
          setVaga(data);
       };
-
       const fetchData = async () => {
          const result = await axios('https://localhost:44311/api/Estacionamento');
          setData(result.data);
@@ -142,9 +141,7 @@ export default function Estacionamento() {
          }
       });
 
-      if (!regexPlaca.test(sendPlaca)) {
-         setSearchPlaca(true);
-      }
+      if (!regexPlaca.test(sendPlaca)) { setSearchPlaca(true); }
 
       let setarLimpeza = TratarDadosLimpeza(sendLimpeza);
       let valueSettings = ValidarConfiguracao(setarLimpeza);
@@ -302,7 +299,6 @@ export default function Estacionamento() {
                      <TDFlex>{/* Modal de Edição */}
                         {(<Modal isOpen={isModalOpen}>
                            <ModalContent>
-                              <h2>Editar</h2>
                               <EditForm>
                                  <h2>Placa:</h2>
                                  <input

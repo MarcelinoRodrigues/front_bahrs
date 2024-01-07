@@ -55,7 +55,7 @@ export default function Configuracoes() {
 
       const result = await axios('https://localhost:44311/api/Configuracoes');
       setData(result.data);
-      setModalOpen(false); // Fechar o modal após a edição
+      setModalOpen(false);
     } catch (error) {
       console.error(error);
     }
@@ -85,8 +85,7 @@ export default function Configuracoes() {
             <TableCell>
               {isModalOpen && (
                 <Modal isOpen={isModalOpen}>
-                  <ModalContent style={{ padding: '90px' }}>
-                    <h2>Editar</h2>
+                  <ModalContent>
                     <EditForm
                       style={{ display: 'table-caption' }}
                       onSubmit={(e) => {
