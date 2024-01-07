@@ -264,21 +264,44 @@ export default function Estacionamento() {
                   });
                }
 
-               const handleEdit = async (item) => {
+               const ResetValueLimpeza = (limpeza) => {
+                  let value;
+
+                  switch (limpeza) {
+                     case "N/A":
+                        value = 0;
+                        break;
+                     case "Completa":
+                        value = 1;
+                        break;
+                     case "Interna":
+                        value = 2;
+                        break;
+                     case "Externa":
+                        value = 3;
+                        break;
+                  }
+
+                  return value;
+               }
+
+               const handleEdit = async () => {
+                  let resetValue = ResetValueLimpeza(itemToEdit.limpeza);
+
                   try {
-                     await axios.put(`https://localhost:44311/api/Estacionamento/`, {
-                        id: item.id,
-                        entrada: item.entrada,
+                     await axios.put(`https://localhost:44311/api/Estacionamento/${itemToEdit.id}`, {
+                        id: itemToEdit.id,
+                        entrada: itemToEdit.entrada,
                         vaga: null,
                         vencimento: null,
                         mensalista: null,
-                        mensalistaId: item.mensalistaId,
-                        placa: item.placa,
-                        funcionario: item.funcionario,
+                        mensalistaId: itemToEdit.mensalistaId,
+                        placa: itemToEdit.placa,
+                        funcionario: null,
                         valor: null,
-                        funcionarioId: item.funcionarioId,
-                        vagaId: item.vagaId,
-                        limpeza: item.limpeza
+                        funcionarioId: itemToEdit.funcionarioId,
+                        vagaId: itemToEdit.vagaId,
+                        limpeza: resetValue
                      });
 
                      const result = await axios('https://localhost:44311/api/Estacionamento');
@@ -297,7 +320,7 @@ export default function Estacionamento() {
                      <TableCell>{nomeVaga}</TableCell>
                      <TableCell>{Limpeza[item.limpeza]}</TableCell>
                      <TDFlex>{/* Modal de Edição */}
-                        {(<Modal isOpen={isModalOpen}>
+                        {isModalOpen && (<Modal isOpen={isModalOpen}>
                            <ModalContent>
                               <EditForm>
                                  <h2>Placa:</h2>
@@ -315,12 +338,12 @@ export default function Estacionamento() {
                                  </Label>
                                  <Label><h2>Limpeza:</h2>
                                     <Select value={Limpeza[itemToEdit.limpeza]}
-                                       disabled={true}
+                                       disabled={false}
                                        onChange={(event) => setItemToEdit({ ...itemToEdit, limpeza: event.target.value })}>
                                        {options}
                                     </Select>
                                  </Label>
-                                 <button type="submit" onClick={() => handleEdit(item)}>Alterar</button>
+                                 <button onClick={() => handleEdit()}>Alterar</button>
                                  <CloseButton onClick={() => setModalOpen(false)}>Fechar</CloseButton>
                               </EditForm>
                            </ModalContent>
