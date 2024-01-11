@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, CloseButton, DeleteButton, DisableButton, EditButton, EditForm, HeaderCell, Modal, ModalContent, StyledTable, TableCell, TableHeader, TableRow, TDConditional } from '../../styles/styles';
+import { Button, ButtonSearch, CloseButton, DeleteButton, DisableButton, DropdownSearch, EditButton, EditForm, FilterContainer, HeaderCell, InputSearch, Modal, ModalContent, StyledTable, TableCell, TableHeader, TableRow, TDConditional } from '../../styles/styles';
 import Nav from "../../components/Nav";
 import Alert from '../../components/Alert';
 
@@ -16,6 +16,7 @@ export default function Vaga() {
    const [catchName, setCatchName] = useState(false);
    const [isAddModalOpen, setAddModalOpen] = useState(false);
    const [isModalOpen, setModalOpen] = useState(false);
+   const [selectedOption, setSelectedOption] = useState('');
 
    useEffect(() => {
       const fetchData = async () => {
@@ -31,6 +32,8 @@ export default function Vaga() {
 
       fetchData();
    }, [vagaOcupada, exclude, success, edit, catchName]);
+
+   const MyEnum = { 0: 'Ativo', 1: 'Ocupado' };
 
    const handleCloseExclude = () => setExclude(false);
    const handleCloseAlert = () => setVagaOcupada(false);
@@ -93,6 +96,21 @@ export default function Vaga() {
       }
    };
 
+   const HandleSearch = async () => {
+      const url = `https://localhost:44311/api/Vagas/Search`;
+
+      try {
+         const response = await axios.get(url, {
+            params: {
+               status: selectedOption
+            }
+         });
+         setData(response.data);
+      } catch (error) {
+         console.error(error);
+      }
+   }
+
    const openModalWithItem = (itemId) => {
       setEditingItemId(itemId);
       setNomeVaga(data.find(item => item.id === itemId).nome);
@@ -102,7 +120,17 @@ export default function Vaga() {
    return (
       <div className="main">
          <Nav />
-         <Button type="default" onClick={() => { setNome(''); setAddModalOpen(true); }}>Novo Registro</Button>
+         <FilterContainer>
+            <DropdownSearch value={selectedOption} onChange={(event) => setSelectedOption(event.target.value)}>
+               {Object.values(MyEnum).map((option) => (
+                  <option key={option} value={option}>
+                     {option}
+                  </option>
+               ))}
+            </DropdownSearch>
+            <ButtonSearch onClick={HandleSearch}>Pesquisar</ButtonSearch>
+         </FilterContainer>
+         <Button type="default" style={{ marginTop: '2px' }} onClick={() => { setNome(''); setAddModalOpen(true); }}>Novo Registro</Button>
          {(
             <Modal isOpen={isAddModalOpen}>
                <ModalContent>
@@ -162,9 +190,9 @@ export default function Vaga() {
                         </Modal>
                      )}
                      {
-                     item.status === 0 ? <EditButton onClick={() => openModalWithItem(item.id)}> Editar </EditButton> 
-                     : 
-                     <DisableButton> Editar </DisableButton>
+                        item.status === 0 ? <EditButton onClick={() => openModalWithItem(item.id)}> Editar </EditButton>
+                           :
+                           <DisableButton> Editar </DisableButton>
                      }
                      <DeleteButton
                         onClick={() => handleRemove(item.id)}> Excluir

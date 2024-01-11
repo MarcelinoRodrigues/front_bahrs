@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { HeaderCell, ManagerTable, StyledTable, TableCell, TableHeader, TableRow } from '../../styles/styles';
+import { ButtonSearch, DropdownSearch, FilterContainer, HeaderCell, InputSearch, ManagerTable, StyledTable, TableCell, TableHeader, TableRow } from '../../styles/styles';
 import Nav from '../../components/Nav';
 import moment from 'moment';
-import { Button, Dropdown, FilterContainer, Input } from './styles';
 
 export default function Historico() {
    const [data, setData] = useState([]);
@@ -61,21 +60,21 @@ export default function Historico() {
       <div className="main">
          <Nav />
          <FilterContainer>
-            <Dropdown value={selectedOption} onChange={handleDropdownChange}>
+            <DropdownSearch value={selectedOption} onChange={handleDropdownChange}>
                <option value="">Selecione uma opção</option>
                {Object.values(MyEnum).map((option) => (
                   <option key={option} value={option}>
                      {option}
                   </option>
                ))}
-            </Dropdown>
-            <Input
+            </DropdownSearch>
+            <InputSearch
                type="text"
                value={inputValue}
                onChange={handleInputChange}
                placeholder="Informe um valor"
             />
-            <Button onClick={handleSubmit}>Pesquisar</Button>
+            <ButtonSearch onClick={handleSubmit}>Pesquisar</ButtonSearch>
          </FilterContainer>
          <StyledTable>
             <TableHeader>
